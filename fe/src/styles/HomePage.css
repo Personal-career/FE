@@ -1,0 +1,93 @@
+/* 전체 화면 */
+.mainpage {
+    min-height: 100vh;
+    background-color: #ffffff;
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+
+/* 헤더 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4B83C1;
+}
+
+.nav a {
+    margin-left: 24px;
+    text-decoration: none;
+    color: #555;
+}
+
+.login-btn {
+    background-color: #4B83C1;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+.login-btn:hover {
+    background-color: #3A6AA0;
+}
+
+/* Hero 섹션 */
+.hero {
+    text-align: center;
+    padding: 80px 16px;
+    background-color: #BEDDFF;
+}
+
+.hero h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #1E3A5F;
+}
+
+.hero p {
+    margin-top: 12px;
+    font-size: 18px;
+    color: #555;
+}
+
+.hero input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px 0 0 8px;
+}
+
+.search-btn {
+    background-color: #4B83C1;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+}
+
+/* 카드 */
+.card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: box-shadow 0.2s;
+}
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.card h4 {
+    color: #1E3A5F;
+    font-weight: bold;
+}
