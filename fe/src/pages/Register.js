@@ -1,11 +1,11 @@
-import '../styles/Register.css';
+import styles from '../styles/Register.module.css';
 
 export default function Register() {
     return (
-        <div className="mainpage">
-            <header className="header">
+        <div className={styles.mainpage}>
+            <header className={styles.header}>
                 <h1>JobMatch</h1>
-                <nav className="nav">
+                <nav className={styles.nav}>
                     <a href="#">채용공고</a>
                     <a href="#">기업분석</a>
                     <a href="#">마이페이지</a>
@@ -13,8 +13,8 @@ export default function Register() {
             </header>
 
             {/* Hero */}
-            <section className="hero">
-                <section className="panel">
+            <section className={styles.hero}>
+                <section className={styles.panel}>
                     <p>회원가입하고 다양한 혜택을 누리세요!</p>
                     <hr/>
                     <form>
@@ -43,7 +43,7 @@ export default function Register() {
                                 </tr>
                                 <tr>
                                     <td>
-                                        <button type={"submit"}  className="login-btn">회원가입</button>
+                                        <button type={"submit"}  className={styles.loginbtn}>회원가입</button>
                                     </td>
                                 </tr>
                             </tbody>

@@ -1,11 +1,11 @@
-import '../styles/Login.css';
+import styles from '../styles/Login.module.css';
 
 export default function Login() {
     return (
-        <div className="mainpage">
-            <header className="header">
+        <div className={styles.mainpage}>
+            <header className={styles.header}>
                 <h1>JobMatch</h1>
-                <nav className="nav">
+                <nav className={styles.nav}>
                     <a href="#">채용공고</a>
                     <a href="#">기업분석</a>
                     <a href="#">마이페이지</a>
@@ -13,7 +13,7 @@ export default function Login() {
             </header>
 
             {/* Hero */}
-            <section className="hero">
+            <section className={styles.hero}>
                 <section>
                     <form>
                         <table>
@@ -23,7 +23,7 @@ export default function Login() {
                                         <label><input type="text" placeholder={"아이디"}></input></label>
                                     </td>
                                     <td rowSpan={2}>
-                                        <button type={"submit"}  className="login-btn">로그인</button>
+                                        <button type={"submit"}  className={styles.loginbtn}>로그인</button>
                                     </td>
                                 </tr>
                                 <tr>

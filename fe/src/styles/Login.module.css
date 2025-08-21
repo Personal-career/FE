@@ -30,17 +30,16 @@ tr {
     color: #555;
 }
 
-.login-btn {
+.loginbtn {
     background-color: #4B83C1;
     color: white;
-    height: 100%;
-    width: 100%;
+    height: 87px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
 }
 
-.login-btn:hover {
+.loginbtn:hover {
     background-color: #3A6AA0;
 }
 
@@ -49,7 +48,6 @@ tr {
     text-align: center;
     padding: 160px 16px;
     background-color: #BEDDFF;
-    height: 300px;
 }
 
 .hero h2 {
@@ -59,14 +57,15 @@ tr {
 }
 
 .hero p {
+    margin-top: 12px;
     font-size: 18px;
     color: #555;
 }
 
 .hero input {
     flex: 1;
+    padding: 12px;
     border: 1px solid #ccc;
-    width: 300px;
     border-radius: 8px;
 }
 .hero section {
@@ -77,20 +76,12 @@ tr {
 table {
     margin: 0 auto;
 }
-td {
-    width: 300px;
-}
 
 .hero section {
     width: 60%;
 }
-
-.panel  {
-    background-color: white;
-    width: 80%;
-    padding: 40px 20px;
-    border-radius: 20px;
-}
-hr {
-    width: 60%;
+.hero a {
+    text-decoration: none;
+    color: #1E3A5F;
+    font-weight: bold;
 }
