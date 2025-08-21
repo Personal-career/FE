@@ -1,0 +1,87 @@
+/* 전체 화면 */
+.mainpage {
+    min-height: 100vh;
+    background-color: #ffffff;
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+
+/* 헤더 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4B83C1;
+}
+
+tr {
+    height: 30px;
+}
+.nav a {
+    margin-left: 24px;
+    text-decoration: none;
+    color: #555;
+}
+
+.login-btn {
+    background-color: #4B83C1;
+    color: white;
+    height: 87px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.login-btn:hover {
+    background-color: #3A6AA0;
+}
+
+/* Hero 섹션 */
+.hero {
+    text-align: center;
+    padding: 160px 16px;
+    background-color: #BEDDFF;
+}
+
+.hero h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #1E3A5F;
+}
+
+.hero p {
+    margin-top: 12px;
+    font-size: 18px;
+    color: #555;
+}
+
+.hero input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+.hero section {
+    margin: 0 auto;
+    text-align: center;
+}
+
+table {
+    margin: 0 auto;
+}
+
+.hero section {
+    width: 60%;
+}
+.hero a {
+    text-decoration: none;
+    color: #1E3A5F;
+    font-weight: bold;
+}
