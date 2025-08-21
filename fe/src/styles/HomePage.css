@@ -1,5 +1,5 @@
 /* 전체 화면 */
-.mainpage {
+.homepage {
     min-height: 100vh;
     background-color: #ffffff;
     color: #333;
@@ -9,16 +9,9 @@
 /* 헤더 */
 .header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 16px 32px;
+    height: 120px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.header h1 {
-    font-size: 24px;
-    font-weight: bold;
-    color: #4B83C1;
 }
 
 .nav a {
@@ -27,62 +20,165 @@
     color: #555;
 }
 
-.login-btn {
-    background-color: #4B83C1;
-    color: white;
+.login-btn, .signup-btn {
+    background-color: #fff;
+    color: #000;
     padding: 8px 16px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
+    font-size:20px;
 }
-.login-btn:hover {
-    background-color: #3A6AA0;
+
+/* hero1: 이미지 오른쪽 */
+.hero1 .hero-content {
+    order: 1;
+    text-align: left;
+}
+
+.hero1 .hero-image {
+    order: 2;
+    transform: translateX(-190px) translateY(-30px);
+}
+
+.hero2 .hero-image {
+    transform: translateX(180px) translateY(-40px);
+}
+
+/* hero2: 이미지 왼쪽 */
+.hero2 {
+    flex-direction: row-reverse; /* 글자와 이미지 순서 뒤집기 */
+}
+
+.hero2 .hero-content {
+    text-align: right;
+}
+
+/* 이미지 크기 조정 */
+.hero-image img {
+    width: 180px;
+    height: auto;
 }
 
 /* Hero 섹션 */
-.hero {
-    text-align: center;
-    padding: 80px 16px;
-    background-color: #BEDDFF;
+.hero-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
-.hero h2 {
-    font-size: 32px;
+.hero1, .hero2 {
+    display: flex;
+    align-items: center;       /* 세로 중앙 정렬 */
+    justify-content: space-between; /* 좌우 배치 */
+    margin-top: 60px;
+    padding: 20px;
+    border-radius: 30px;
+    background-color: #BEDDFF;
+    gap: 20px;
+}
+
+.hero1 {
+    text-align: left;
+    margin-left: 20px;
+}
+.hero2 {
+    text-align: right;
+    margin-right: 30px;
+}
+
+.hero1 h2, .hero1 p {
+    margin-left: 50px;
+}
+
+.hero2 h2, .hero2 p {
+    margin-right: 50px;
+}
+
+.hero1 h2, .hero2 h2 {
+    font-size: 40px;
     font-weight: bold;
     color: #1E3A5F;
 }
 
-.hero p {
+.hero1 p, .hero2 p {
     margin-top: 12px;
-    font-size: 18px;
-    color: #555;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
 }
 
-.hero input {
+.hero1 input, .hero2 input {
     flex: 1;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 8px 0 0 8px;
 }
 
+.Corporation-btn,
+.job-btn {
+    background-color: #ffffff;   /* 흰색 배경 */
+    color: #333;                 /* 글자색 */
+    width: 594px;
+    height: 70px;
+    font-weight: bold;           /* 글자 두껍게 */
+    font-size: 30px;             /* 글자 크게 */
+    padding: 12px 24px;          /* 버튼 크기 조정 */
+    border: none;                /* 테두리 제거 */
+    border-radius: 12px;         /* 모서리 둥글게 */
+    cursor: pointer;             /* 마우스 올리면 손가락 모양 */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* 살짝 그림자 */
+    transition: all 0.2s ease;   /* hover 애니메이션 */
+    display: block;      /* inline → block으로 바꿔야 margin 적용 가능 */
+    margin: 20px auto;
+}
+
+.Corporation-btn:hover,
+.job-btn:hover {
+    background-color: #f5f5f5;   /* hover 시 배경 살짝 회색 */
+    transform: translateY(-2px); /* 살짝 위로 올라가는 효과 */
+}
+
 .search-btn {
     background-color: #4B83C1;
+    width: 50px;
+    height: 50px;
     color: white;
-    padding: 12px 24px;
     border: none;
     border-radius: 0 8px 8px 0;
     cursor: pointer;
 }
 
+.search-btn img {
+    width: 40px;   /* 이미지 가로 크기 */
+    height: 40px;  /* 이미지 세로 크기 */
+    object-fit: contain; /* 비율 유지 */
+}
+
 /* 카드 */
 .card {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    transition: box-shadow 0.2s;
+    position: relative; /* 자식 요소 위치를 기준으로 */
+    width: 200px; /* 카드 가로 크기 */
+    padding: 20px;
+    border-radius: 10px; /* 모서리 둥글게 */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    background-color: #fff; /* 카드 배경 */
+    text-align: center;
 }
+
+#d-day {
+    position: absolute; /* 카드 안에서 절대 위치 */
+    top: 10px;
+    right: 10px;
+    background-color: #4B83C1; /* 요청하신 배경색 */
+    color: #fff; /* 글자색 흰색 */
+    padding: 5px 10px;
+    border-radius: 8px; /* 모서리 둥글게 */
+    font-weight: bold;
+    font-size: 14px;
+}
+
 .card:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
@@ -90,4 +186,59 @@
 .card h4 {
     color: #1E3A5F;
     font-weight: bold;
+}
+
+/* 챗봇 */
+/* 챗봇 버튼: 오른쪽 하단 고정 */
+.chat-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    z-index: 1000; /* 다른 요소 위 */
+}
+
+/* 챗봇 대화창 */
+.chat-window {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    height: 450px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1001; /* 버튼보다 위 */
+}
+
+.chat-header {
+    background-color: #4B83C1;
+    color: #fff;
+    padding: 10px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-body {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.chat-body div {
+    margin-bottom: 10px;
+}
+
+.chat-window input {
+    border: none;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    outline: none;
 }

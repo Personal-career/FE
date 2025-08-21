@@ -1,46 +1,116 @@
+import { useState } from "react";
+import ChatBot from "../components/ChatBot";
+
 import '../styles/HomePage.css';
+import logo from '../images/logo.png';
+import search from '../images/search.png';
+import ai from '../images/ai.png';
+import realtime from '../images/realtime.png';
+import chatbot from '../images/chatbot.png';
 
 export default function HomePage() {
+    const [chatOpen, setChatOpen] = useState(false);
+
     return (
-        <div className="mainpage">
+        <div className="homepage">
+            {/* 헤더 */}
             <header className="header">
-                <h1>JobMatch</h1>
-                <nav className="nav">
-                    <a href="#">채용공고</a>
-                    <a href="#">기업분석</a>
-                    <a href="#">마이페이지</a>
-                </nav>
+                <img src={logo} alt="logo" height="200px" width="300px" />
+                <div style={{ display: "flex", maxWidth: "800px", margin: "20px auto" }}>
+                    <input type="text" placeholder="회사명 | 직무 검색" />
+                    <button className="search-btn">
+                        <img src={search} alt="search" />
+                    </button>
+                </div>
                 <button className="login-btn">로그인</button>
+                <button className="signup-btn">회원가입</button>
             </header>
 
-            {/* Hero */}
-            <section className="hero">
-                <h2>AI 기반 맞춤형 채용 공고 모니터링</h2>
-                <p>관심 기업의 채용 소식을 매일 확인하세요</p>
-                <div style={{ display: "flex", maxWidth: "400px", margin: "20px auto" }}>
-                    <input type="text" placeholder="회사명 / 직무 검색" />
-                    <button className="search-btn">검색</button>
+            {/* 히어로 섹션 */}
+            <div className="hero-container">
+                <section className="hero1">
+                    <div className="hero-content">
+                        <h2>
+                            실시간 채용 <br /> 공고 모니터링
+                        </h2>
+                        <p>
+                            관심 기업의 채용 소식을 <br /> 매일 확인하세요.
+                        </p>
+                        <button className="Corporation-btn">관심 기업 등록하기</button>
+                    </div>
+                    <div className="hero-image">
+                        <img src={realtime} alt="realtime" />
+                    </div>
+                </section>
+
+                <section className="hero2">
+                    <div className="hero-content">
+                        <h2>
+                            AI 기반 맞춤형 채용 <br /> 공고 모니터링
+                        </h2>
+                        <p>
+                            나의 직무에 맞는 채용 소식을 <br /> 매일 받아보세요.
+                        </p>
+                        <button className="job-btn">나의 직무 등록하기</button>
+                    </div>
+                    <div className="hero-image">
+                        <img src={ai} alt="ai" />
+                    </div>
+                </section>
+            </div>
+
+            {/* 카드 섹션 */}
+            <section style={{ padding: "40px", width: "100%", margin: "0 auto" }}>
+                <h3
+                    style={{
+                        color: "#000000",
+                        fontSize: "40px",
+                        textAlign: "left",
+                        marginBottom: "20px"
+                    }}
+                >
+                    오늘의 추천 채용 공고
+                </h3>
+                <div
+                    style={{
+                        display: "grid",
+                        gap: "40px",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+                        justifyContent: "center",
+                        width: "100%"
+                    }}
+                >
+                    {Array.from({ length: 8 }).map((_, idx) => (
+                        <div key={idx} className="card">
+                            <img src={logo} alt="company" height="100px" width="150px" />
+                            <p id="d-day">D-10</p>
+                            <p id="company-name">(주)OO회사</p>
+                            <h4 id="job">직무 {idx + 1}</h4>
+                            <p id="description">서울 · 정규직</p>
+                        </div>
+                    ))}
                 </div>
             </section>
 
-            {/* 카드 예시 */}
-            <section style={{ padding: "40px", maxWidth: "1000px", margin: "auto" }}>
-                <h3 style={{ color: "#4B83C1" }}>오늘의 추천 채용 공고</h3>
-                <div style={{ display: "grid", gap: "20px", gridTemplateColumns: "repeat(3, 1fr)" }}>
-                    <div className="card">
-                        <h4>프론트엔드 개발자</h4>
-                        <p>서울 · 정규직</p>
-                    </div>
-                    <div className="card">
-                        <h4>데이터 분석가</h4>
-                        <p>서울 · 정규직</p>
-                    </div>
-                    <div className="card">
-                        <h4>UX 디자이너</h4>
-                        <p>서울 · 정규직</p>
-                    </div>
-                </div>
-            </section>
+            {/* 챗봇 버튼 & 창 */}
+            {!chatOpen && (
+                <img
+                    src={chatbot}
+                    alt="chat"
+                    onClick={() => setChatOpen(true)}
+                    style={{
+                        cursor: "pointer",
+                        position: "fixed",
+                        bottom: "20px",
+                        right: "20px",
+                        width: "60px",
+                        height: "60px",
+                        zIndex: 1000
+                    }}
+                />
+            )}
+
+            {chatOpen && <ChatBot onClose={() => setChatOpen(false)} />}
         </div>
     );
 }
