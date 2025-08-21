@@ -1,5 +1,5 @@
 import styles from '../styles/Login.module.css';
-import img from '../images/movie_image (5).jpg';
+import img from '../images/다운로드 (2).jpg';
 
 export default function Login() {
     return (
