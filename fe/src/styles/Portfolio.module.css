@@ -26,6 +26,7 @@
     margin: 0 auto;
     gap: 40px;
     flex-wrap: wrap;
+    width: 90%;
 }
 
 /* 왼쪽 사이드 */
@@ -74,6 +75,8 @@
     flex: 1 1 400px;
     max-width: 600px;
     min-width: 300px;
+    text-align: left;
+    margin-left: 100px;
 }
 
 .tag {
@@ -137,4 +140,77 @@
     .applied-jobs .job-cards {
         justify-content: center;
     }
+    tag-input {
+        min-width: 160px;
+    }
+}
+
+.tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 8px 0 12px;
+}
+
+.tag-btn {
+    border: 1px solid #007bff;
+    background: #fff;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.05s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.tag-btn:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.tag-btn:active {
+    transform: translateY(1px);
+}
+
+.tag-btn.selected {
+    background: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* 입력 + 추가 버튼 */
+.tag-input-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.tag-input-row input {
+    height: 30px
+}
+
+.tag-input {
+    flex: 1;
+    min-width: 220px;
+    padding: 8px 10px;
+    border: 1px solid #d0d7de;
+    border-radius: 8px;
+}
+
+.add-btn {
+    padding: 8px 14px;
+    border: 1px solid #007bff;
+    background: #f4f8ff;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.add-btn:hover {
+    background: #e8f1ff;
+}
+
+/* 접근성 포커스 */
+.tag-btn:focus,
+.tag-input:focus {
+    outline: 2px solid #99c2ff;
+    outline-offset: 2px;
 }
