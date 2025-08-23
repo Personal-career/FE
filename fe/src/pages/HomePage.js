@@ -50,7 +50,7 @@ export default function HomePage() {
             </div>
 
             {/* 카드 섹션 */}
-            <section style={{ padding: "40px", width: "100%", margin: "0 auto" }}>
+            <section className='card-section' style={{ width: "100%", margin: "0 auto" }}>
                 <h3
                     style={{
                         color: "#000000",
