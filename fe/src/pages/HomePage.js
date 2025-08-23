@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ChatBot from "../components/ChatBot";
 
 import '../styles/HomePage.css';
@@ -10,21 +11,10 @@ import chatbot from '../images/chatbot.png';
 
 export default function HomePage() {
     const [chatOpen, setChatOpen] = useState(false);
+    const navigate = useNavigate();
 
     return (
         <div className="homepage">
-            {/* 헤더 */}
-            <header className="header">
-                <img src={logo} alt="logo" height="200px" width="300px" />
-                <div style={{ display: "flex", maxWidth: "800px", margin: "20px auto" }}>
-                    <input type="text" placeholder="회사명 | 직무 검색" />
-                    <button className="search-btn">
-                        <img src={search} alt="search" />
-                    </button>
-                </div>
-                <button className="login-btn">로그인</button>
-                <button className="signup-btn">회원가입</button>
-            </header>
 
             {/* 히어로 섹션 */}
             <div className="hero-container">
