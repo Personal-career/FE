@@ -3,14 +3,6 @@ import styles from '../styles/Register.module.css';
 export default function Register() {
     return (
         <div className={styles.mainpage}>
-            <header className={styles.header}>
-                <h1>JobMatch</h1>
-                <nav className={styles.nav}>
-                    <a href="#">채용공고</a>
-                    <a href="#">기업분석</a>
-                    <a href="#">마이페이지</a>
-                </nav>
-            </header>
 
             {/* Hero */}
             <section className={styles.hero}>
