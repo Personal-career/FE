@@ -14,7 +14,7 @@ export default function Register() {
             const response = await fetch("http://localhost:8080/member/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, member_id: memberId, pw, email }),
+                body: JSON.stringify({ name, memberId, pw, email }),
                 credentials: "include", // 쿠키/세션 허용
             });
 
