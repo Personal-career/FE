@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Portfolio from "./pages/Portfolio";
 
 function App() {
     return (
@@ -17,6 +18,5 @@ function App() {
                 </Routes>
         </Router>
     );
-}
 
 export default App;
