@@ -3,8 +3,14 @@ import logo from "../images/logo.png";
 import search from "../images/search.png";
 import styles from '../styles/header.module.css';
 
-function Header() {
+function Header({ isLoggedIn, setIsLoggedIn }) {
     const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem("token"); // 토큰 제거
+        setIsLoggedIn(false);
+        navigate("/");
+    }
 
     return (
         <header>
@@ -19,8 +25,17 @@ function Header() {
             </div>
 
             <div className={styles['header-buttons']}>
-                <button onClick={() => navigate("/login")}>로그인</button>
-                <button onClick={() => navigate("/register")}>회원가입</button>
+                {isLoggedIn ? (
+                    <>
+                        <button onClick={() => navigate("/portfolio")}>포트폴리오</button>
+                        <button onClick={handleLogout}>로그아웃</button>
+                    </>
+                ) : (
+                    <>
+                        <button onClick={() => navigate("/login")}>로그인</button>
+                        <button onClick={() => navigate("/signup")}>회원가입</button>
+                    </>
+                )}
             </div>
         </header>
     );

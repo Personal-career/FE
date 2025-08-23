@@ -5,16 +5,18 @@ import Header from "./components/Header";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Portfolio from "./pages/Portfolio";
+import {useState} from "react";
 
 function App() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태
+
     return (
         <Router>
-            <Header/>
+            <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
             <Routes>
                 <Route path="/" element={<HomePage/>}/>
-                <Route path="/login" element={<Login/>}/>
-                <Route path="/register" element={<Register/>}/>
+                <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />}/>
+                <Route path="/signup" element={<Register/>}/>
                 <Route path="/portfolio" element={<Portfolio/>}/>
             </Routes>
         </Router>
