@@ -1,12 +1,13 @@
 /* 헤더 전체 */
 header {
-    width: 100%;
+    width: 90%;
+    margin: 0 auto;
     height: 120px;
     display: flex;
     align-items: center;
     justify-content: space-between; /* 왼쪽-중간-오른쪽 배치 */
     padding: 0 40px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    /*box-shadow: 0 2px 4px rgba(0,0,0,0.1);*/
     background-color: #fff;
     box-sizing: border-box;
 }
@@ -17,12 +18,15 @@ header img {
     width: auto;
 }
 
-header button {
-    border: 0px;
-    background-color: white;
+header button.logo {
+    background-color: transparent; /* 배경 투명 */
+    border: none;                  /* 테두리 제거 */
+    padding: 0;                    /* 필요시 패딩 제거 */
+    cursor: pointer;               /* 마우스 커서 포인터 */
 }
 
-.logo {
+/* 로고 이미지 크기 */
+header button.logo img {
     width: 200px;
     height: auto;
 }
@@ -76,4 +80,48 @@ header button {
 
 .header-buttons button:hover {
     background-color: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column; /* 위아래 배치 */
+        height: auto;
+        padding: 20px;
+        gap: 16px; /* 요소 간 간격 */
+    }
+
+    /* 로고 */
+    header button.logo img {
+        width: 150px; /* 작은 화면에서는 로고 줄이기 */
+    }
+
+    /* 검색창 */
+    .search-container {
+        width: 100%;
+        height: 50px;
+    }
+    .search-container input {
+        width: 100%;   /* 전체 너비 차지 */
+        font-size: 14px;
+    }
+    .search-container button {
+        padding: 6px 10px;
+    }
+    .search-container img {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* 버튼 그룹 */
+    .header-buttons {
+        flex-direction: row;
+        gap: 8px;
+        justify-content: center; /* 중앙 정렬 */
+        width: 100%;
+    }
+    .header-buttons button {
+        flex: 1; /* 버튼이 균등 분배 */
+        font-size: 14px;
+        padding: 6px 10px;
+    }
 }

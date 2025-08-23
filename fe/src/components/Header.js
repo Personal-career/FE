@@ -14,8 +14,8 @@ function Header({ isLoggedIn, setIsLoggedIn }) {
 
     return (
         <header>
-            <button onClick={() => navigate("/")}>
-                <img className={styles['logo']} src={logo} alt="logo"/>
+            <button className={styles['logo']} onClick={() => navigate("/")}>
+                <img src={logo} alt="logo"/>
             </button>
             <div className={styles['search-container']}>
                 <input type="text" placeholder="회사명 | 직무 검색"/>

@@ -17,6 +17,7 @@ function App() {
                 <Route path="/" element={<HomePage/>}/>
                 <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />}/>
                 <Route path="/signup" element={<Register/>}/>
+                <Route path="/portfolio" element={<Portfolio/>}/>
             </Routes>
         </Router>
     );

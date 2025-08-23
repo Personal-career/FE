@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import styles from '../styles/Portfolio.module.css';
+import logo from "../images/logo.png";
+import ProjectModal from "../components/ProjectModal";
 
 export default function Portfolio() {
     const initialUser = useMemo(() => ({
@@ -9,10 +11,17 @@ export default function Portfolio() {
         desiredJobs: ["프론트엔드", "백엔드", "풀스택"],
         techStack: ["React", "Spring", "MySQL"],
         interests: ["카카오", "네이버", "삼성"],
-        projects: ["프로젝트 A", "프로젝트 B", "프로젝트 C"],
+        projects: [
+            { name: "프로젝트 A", period: "1개월", type: "웹 개발", award: "없음", description: "간단한 웹사이트 제작", techStack: ["React", "CSS"] },
+            { name: "프로젝트 B", period: "2개월", type: "앱 개발", award: "없음", description: "모바일 앱 제작", techStack: ["React Native", "Node.js"] },
+            { name: "프로젝트 C", period: "3개월", type: "백엔드 개발", award: "없음", description: "API 서버 제작", techStack: ["Spring", "MySQL"] }
+        ],
         appliedJobs: [
             { company: "OO 기업", deadline: "마감 5일 전", type: "신입 및 경력 사원 모집" },
             { company: "OO 기업", deadline: "마감 5일 전", type: "신입 및 경력 사원 모집" },
+            { company: "OO 기업", deadline: "마감 5일 전", type: "신입 및 경력 사원 모집" },
+            { company: "OO 기업", deadline: "마감 5일 전", type: "신입 및 경력 사원 모집" },
+            { company: "OO 기업", deadline: "마감 5일 전", type: "신입 및 경력 사원 모집" }
         ]
     }), []);
 
@@ -26,6 +35,9 @@ export default function Portfolio() {
     // 입력값 (새 태그 추가)
     const [desiredInput, setDesiredInput] = useState('');
     const [techInput, setTechInput] = useState('');
+
+    const [selectedProject, setSelectedProject] = useState(null);
+    const colors = ["#007bff", "#28a745", "#ffc107", "#dc3545", "#6f42c1"];
 
     const user = {
         ...initialUser,
@@ -55,6 +67,25 @@ export default function Portfolio() {
         }
     };
 
+    const removeTag = (section, value) => {
+        if (section === 'desired') {
+            setDesiredJobs(prev => prev.filter(job => job !== value));
+            setSelectedDesired(prev => {
+                const next = new Set(prev);
+                next.delete(value);
+                return next;
+            });
+        } else {
+            setTechStack(prev => prev.filter(tech => tech !== value));
+            setSelectedTech(prev => {
+                const next = new Set(prev);
+                next.delete(value);
+                return next;
+            });
+        }
+    };
+
+
     const handleKeyDown = (e, section) => {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -65,12 +96,6 @@ export default function Portfolio() {
 
     return (
         <div className={styles['profile-page']}>
-            <header className={styles.header}>
-                <h1>로고</h1>
-                <input type="text" placeholder="검색" className={styles['search-bar']}/>
-                <span className={styles.logout}>로그아웃</span>
-            </header>
-
             <div className={styles['profile-container']}>
                 <div className={styles['profile-left']}>
                     <div className={styles['profile-image-info']}>
@@ -86,14 +111,32 @@ export default function Portfolio() {
                     <div className={styles['interests']}>
                         <h3>관심 기업</h3>
                         <div className={styles['circle-list']}>
-                            {user.interests.map((item, idx) => <div key={idx} className={styles.circle}></div>)}
+                            {initialUser.interests.map((item, idx) => (
+                                <div
+                                    key={idx}
+                                    className={styles.circle}
+                                    style={{ backgroundColor: colors[idx % colors.length] }}
+                                    onClick={() => setDesiredJobs(item)}
+                                >
+                                    <span className={styles['circle-text']}>{item[0]}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
                     <div className={styles.projects}>
                         <h3>나의 프로젝트</h3>
                         <div className={styles['circle-list']}>
-                            {user.projects.map((item, idx) => <div key={idx} className={styles.circle}></div>)}
+                            {initialUser.projects.map((proj, idx) => (
+                                <div
+                                    key={idx}
+                                    className={styles.circle}
+                                    style={{ backgroundColor: colors[idx % colors.length] }}
+                                    onClick={() => setSelectedProject(proj)}
+                                >
+                                    <span className={styles['circle-text']}>{proj.name[0]}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -103,16 +146,10 @@ export default function Portfolio() {
                         <h3>희망 직무</h3>
                         <div className={styles['tag-row']}>
                             {desiredJobs.map((job) => (
-                                <button
-                                    key={job}
-                                    type="button"
-                                    className={`${styles['tag-btn']} ${selectedDesired.has(job) ? styles['selected'] : ''}`}
-                                    aria-pressed={selectedDesired.has(job)}
-                                    onClick={() => toggleSelection('desired', job)}
-                                    title={job}
-                                >
-                                    {job}
-                                </button>
+                                <div key={job} className={styles['tag-wrapper']}>
+                                    <span className={styles['tag']}>{job}</span>
+                                    <button className={styles['tag-remove']} onClick={() => removeTag('desired', job)}>×</button>
+                                </div>
                             ))}
                         </div>
                         <div className={styles['tag-input-row']}>
@@ -132,16 +169,10 @@ export default function Portfolio() {
                         <h3>기술 스택</h3>
                         <div className={styles['tag-row']}>
                             {techStack.map((tech) => (
-                                <button
-                                    key={tech}
-                                    type="button"
-                                    className={`${styles['tag-btn']} ${selectedDesired.has(tech) ? styles['selected'] : ''}`}
-                                    aria-pressed={selectedTech.has(tech)}
-                                    onClick={() => toggleSelection('tech', tech)}
-                                    title={tech}
-                                >
-                                    {tech}
-                                </button>
+                                <div key={tech} className={styles['tag-wrapper']}>
+                                    <span className={styles['tag']}>{tech}</span>
+                                    <button className={styles['tag-remove']} onClick={() => removeTag('tech', tech)}>×</button>
+                                </div>
                             ))}
                         </div>
 
@@ -171,6 +202,20 @@ export default function Portfolio() {
                             ))}
                         </div>
                     </div>
+                </div>
+                <div className={styles['profile-modal']}>
+                    {/* 오른쪽 상세 정보 탭 */}
+                    {selectedProject && (
+                        <ProjectModal
+                            project={selectedProject}
+                            onClose={() => setSelectedProject(null)}
+                            onUpdate={(updatedProject) => {
+                                console.log("업데이트된 프로젝트:", updatedProject);
+                                setSelectedProject(updatedProject);
+                                // TODO: 추후 DB 반영
+                            }}
+                        />
+                    )}
                 </div>
             </div>
         </div>
