@@ -17,6 +17,20 @@ header img {
     width: auto;
 }
 
+header button {
+    border: 0px;
+    background-color: white;
+}
+
+.logo {
+    width: 200px;
+    height: auto;
+}
+.search-container img {
+    width: 40px;
+    height: auto;
+    margin: auto;
+}
 /* 검색 영역 */
 .search-container {
     display: flex;
@@ -51,6 +65,7 @@ header img {
 .header-buttons button {
     background-color: #fff;
     color: #000;
+    width: max-content;
     padding: 8px 16px;
     border-radius: 8px;
     border: 1px solid #ccc;

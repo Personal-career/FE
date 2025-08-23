@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../images/logo.png";
 import search from "../images/search.png";
-import '../styles/header.css';
+import styles from '../styles/header.module.css';
 
 function Header() {
     const navigate = useNavigate();
@@ -9,16 +9,16 @@ function Header() {
     return (
         <header>
             <button onClick={() => navigate("/")}>
-                <img src={logo} alt="logo"/>
+                <img className={styles['logo']} src={logo} alt="logo"/>
             </button>
-            <div className="search-container">
+            <div className={styles['search-container']}>
                 <input type="text" placeholder="회사명 | 직무 검색"/>
                 <button>
                     <img src={search} alt="search"/>
                 </button>
             </div>
 
-            <div className="header-buttons">
+            <div className={styles['header-buttons']}>
                 <button onClick={() => navigate("/login")}>로그인</button>
                 <button onClick={() => navigate("/register")}>회원가입</button>
             </div>

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import styles from '../styles/Portfolio.module.css';
 
 export default function Portfolio() {
-    const user = {
+    const initialUser = useMemo(() => ({
         name: "홍길동",
         phone: "010-1111-1111",
         address: "서울시 OO구 OO동",
@@ -14,7 +14,54 @@ export default function Portfolio() {
             { company: "OO 기업", deadline: "마감 5일 전", type: "신입 및 경력 사원 모집" },
             { company: "OO 기업", deadline: "마감 5일 전", type: "신입 및 경력 사원 모집" },
         ]
+    }), []);
+
+    const [desiredJobs, setDesiredJobs] = useState(initialUser.desiredJobs);
+    const [techStack, setTechStack] = useState(initialUser.techStack);
+
+    // 선택 상태 (Set 사용: 빠른 토글/존재확인)
+    const [selectedDesired, setSelectedDesired] = useState(new Set());
+    const [selectedTech, setSelectedTech] = useState(new Set());
+
+    // 입력값 (새 태그 추가)
+    const [desiredInput, setDesiredInput] = useState('');
+    const [techInput, setTechInput] = useState('');
+
+    const user = {
+        ...initialUser,
+        desiredJobs,
+        techStack,
     };
+
+    const toggleSelection = (section, value) => {
+        const updater = section === 'desired' ? setSelectedDesired : setSelectedTech;
+        const current = section === 'desired' ? selectedDesired : selectedTech;
+        const next = new Set(current);
+        next.has(value) ? next.delete(value) : next.add(value);
+        updater(next);
+    };
+
+    const addTag = (section) => {
+        if (section === 'desired') {
+            const name = desiredInput.trim();
+            if (!name) return;
+            if (!desiredJobs.includes(name)) setDesiredJobs(prev => [...prev, name]);
+            setDesiredInput('');
+        } else {
+            const name = techInput.trim();
+            if (!name) return;
+            if (!techStack.includes(name)) setTechStack(prev => [...prev, name]);
+            setTechInput('');
+        }
+    };
+
+    const handleKeyDown = (e, section) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addTag(section);
+        }
+    };
+
 
     return (
         <div className={styles['profile-page']}>
@@ -54,12 +101,61 @@ export default function Portfolio() {
                 <div className={styles['profile-right']}>
                     <div className={styles['desired-jobs']}>
                         <h3>희망 직무</h3>
-                        {user.desiredJobs.map((job, idx) => <span key={idx} className={styles.tag}>{job}</span>)}
+                        <div className={styles['tag-row']}>
+                            {desiredJobs.map((job) => (
+                                <button
+                                    key={job}
+                                    type="button"
+                                    className={`${styles['tag-btn']} ${selectedDesired.has(job) ? styles['selected'] : ''}`}
+                                    aria-pressed={selectedDesired.has(job)}
+                                    onClick={() => toggleSelection('desired', job)}
+                                    title={job}
+                                >
+                                    {job}
+                                </button>
+                            ))}
+                        </div>
+                        <div className={styles['tag-input-row']}>
+                            <input
+                                type="text"
+                                placeholder="새 직무 입력 후 Enter"
+                                value={desiredInput}
+                                onChange={(e) => setDesiredInput(e.target.value)}
+                                onKeyDown={(e) => handleKeyDown(e, 'desired')}
+                                className="tag-input"
+                            />
+                            <button type="button" className={styles['add-btn']} onClick={() => addTag('desired')}>추가</button>
+                        </div>
                     </div>
 
                     <div className={styles['tech-stack']}>
                         <h3>기술 스택</h3>
-                        {user.techStack.map((tech, idx) => <span key={idx} className={styles.tag}>{tech}</span>)}
+                        <div className={styles['tag-row']}>
+                            {techStack.map((tech) => (
+                                <button
+                                    key={tech}
+                                    type="button"
+                                    className={`${styles['tag-btn']} ${selectedDesired.has(tech) ? styles['selected'] : ''}`}
+                                    aria-pressed={selectedTech.has(tech)}
+                                    onClick={() => toggleSelection('tech', tech)}
+                                    title={tech}
+                                >
+                                    {tech}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className={styles['tag-input-row']}>
+                            <input
+                                type="text"
+                                placeholder="새 스택 입력 후 Enter"
+                                value={techInput}
+                                onChange={(e) => setTechInput(e.target.value)}
+                                onKeyDown={(e) => handleKeyDown(e, 'tech')}
+                                className="tag-input"
+                            />
+                            <button type="button" className={styles['add-btn']} onClick={() => addTag('tech')}>추가</button>
+                        </div>
                     </div>
 
                     <div className={styles['applied-jobs']}>
