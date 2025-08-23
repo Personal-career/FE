@@ -66,8 +66,8 @@ export default function HomePage() {
                         display: "grid",
                         gap: "40px",
                         gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-                        justifyContent: "center",
-                        width: "100%"
+                        width: "100%",
+                        justifyContent: "stretch"
                     }}
                 >
                     {Array.from({ length: 8 }).map((_, idx) => (

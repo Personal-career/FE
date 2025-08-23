@@ -10,13 +10,13 @@ import Portfolio from "./pages/Portfolio";
 function App() {
     return (
         <Router>
-            <Header />
+            <Header/>
             <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                </Routes>
+                <Route path="/" element={<HomePage/>}/>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/register" element={<Register/>}/>
+            </Routes>
         </Router>
     );
-
+}
 export default App;
