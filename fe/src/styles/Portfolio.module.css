@@ -1,36 +1,23 @@
 .profile-page {
     padding: 20px;
     font-family: Arial, sans-serif;
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.search-bar {
-    flex: 1 1 300px;
-    padding: 5px;
-}
-
-.logout {
-    cursor: pointer;
-    color: gray;
+    width: 90%;
+    margin: 0 auto;
 }
 
 .profile-container {
     display: flex;
+    justify-content: space-between;
     margin: 0 auto;
-    gap: 40px;
+    gap: 20px;
     flex-wrap: wrap;
     width: 90%;
 }
 
 /* 왼쪽 사이드 */
 .profile-left {
+    margin: 0 auto;
+    padding-right: 20px;
     flex: 0 0 250px;
 }
 
@@ -66,17 +53,26 @@
 .circle {
     width: 50px;
     height: 50px;
-    background: #ccc;
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
 }
 
+.circle-text {
+    font-size: 18px;
+    user-select: none;
+}
 /* 오른쪽 컨텐츠 */
 .profile-right {
+    margin: 0 auto;
     flex: 1 1 400px;
     max-width: 600px;
     min-width: 300px;
     text-align: left;
-    margin-left: 100px;
 }
 
 .tag {
@@ -98,12 +94,14 @@
 
 .job-card {
     padding: 10px;
-    border: 1px solid #007bff;
     border-radius: 10px;
     width: 150px;
     text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
-
+.job-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
 .job-card .circle {
     width: 40px;
     height: 40px;
@@ -140,7 +138,7 @@
     .applied-jobs .job-cards {
         justify-content: center;
     }
-    tag-input {
+    .tag-input {
         min-width: 160px;
     }
 }
@@ -185,32 +183,96 @@
 }
 
 .tag-input-row input {
-    height: 30px
+    height: 30px;
+    border: 1px solid grey;
+    padding-left: 10px;
+    border-radius: 10px;
 }
-
+.tag-input-row::placeholder {
+    color: #aaa;              /* 회색 placeholder */
+    padding-left: 4px;        /* placeholder 좌측 여백 */
+    opacity: 1;               /* 기본 브라우저 opacity override */
+}
 .tag-input {
-    flex: 1;
-    min-width: 220px;
-    padding: 8px 10px;
-    border: 1px solid #d0d7de;
-    border-radius: 8px;
+    padding: 8px 12px;        /* 위/아래 8px, 좌/우 12px */
+    border-radius: 12px;      /* 모서리 둥글게 */
+    border: 1px solid #ccc;   /* 테두리 색상 */
+    font-size: 14px;
+    outline: none;
 }
 
 .add-btn {
     padding: 8px 14px;
     border: 1px solid #007bff;
-    background: #f4f8ff;
+    background: #007bff;
     border-radius: 10px;
+    color: white;
     cursor: pointer;
 }
 
 .add-btn:hover {
-    background: #e8f1ff;
+    background: #0059ba;
 }
 
 /* 접근성 포커스 */
 .tag-btn:focus,
 .tag-input:focus {
-    outline: 2px solid #99c2ff;
-    outline-offset: 2px;
+}
+
+.project-detail {
+    position: fixed; /* 화면 고정 */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6); /* 반투명 배경 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* 다른 요소 위로 */
+}
+
+.project-detail > .content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 800px;
+    max-height: 90%;
+    overflow-y: auto;
+}
+
+.tag-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 4px;
+}
+
+.tag {
+    padding: 10px 15px;
+    background-color: #BEDDFF;
+    border-radius: 12px;
+    font-size: 14px;
+    border: none;
+}
+
+.tag-remove {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color: #f89294;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    cursor: pointer;
+    line-height: 16px;
+    padding: 0;
+}
+.tag-remove:hover {
+    width: 20px;
+    height: 20px;
+    background-color: #d37173;
 }
