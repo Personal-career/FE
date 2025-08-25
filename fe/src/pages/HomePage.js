@@ -1,17 +1,53 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ChatBot from "../components/ChatBot";
-
+import EmploymentModal from "../components/Employment"; // 모달 import
 import '../styles/HomePage.css';
-import logo from '../images/logo.png';
-import search from '../images/search.png';
 import ai from '../images/ai.png';
 import realtime from '../images/realtime.png';
 import chatbot from '../images/chatbot.png';
+import defaultLogo from "../images/logo.png";
 
 export default function HomePage() {
     const [chatOpen, setChatOpen] = useState(false);
+    const [selectedJob, setSelectedJob] = useState(null);
     const navigate = useNavigate();
+
+    //더미데이터
+    const jobs = [
+        {
+            empSeqno: "123456",
+            empWantedTitle: "프론트엔드 개발자",
+            empBusiNm: "신세계푸드",
+            empWantedTypeNm: "정규직",
+            empWantedStdt: "2025-08-20",
+            empWantedEndt: "2025-09-10",
+            empWantedHomepgDetail: "https://job.example.com/123456",
+            regLogImgNm: defaultLogo,
+            location: "서울"
+        },
+        {
+            empSeqno: "654321",
+            empWantedTitle: "백엔드 개발자",
+            empBusiNm: "OO회사",
+            empWantedTypeNm: "계약직",
+            empWantedStdt: "2025-08-22",
+            empWantedEndt: "2025-09-15",
+            empWantedHomepgDetail: "https://job.example.com/654321",
+            regLogImgNm: defaultLogo,
+            location: "부산"
+        }
+    ];
+
+    // → 카드 클릭 시 모달 열기
+    const handleCardClick = (job) => {
+        setSelectedJob(job);
+    };
+
+    // → 모달 닫기
+    const handleCloseModal = () => {
+        setSelectedJob(null);
+    };
 
     return (
         <div className="homepage">
@@ -21,65 +57,65 @@ export default function HomePage() {
                 <section className="hero1">
                     <div className="hero-content">
                         <h2>
-                            실시간 채용 <br /> 공고 모니터링
+                            실시간 채용 <br/> 공고 모니터링
                         </h2>
                         <p>
-                            관심 기업의 채용 소식을 <br /> 매일 확인하세요.
+                            관심 기업의 채용 소식을 <br/> 매일 확인하세요.
                         </p>
                         <button className="Corporation-btn">관심 기업 등록하기</button>
                     </div>
                     <div className="hero-image">
-                        <img src={realtime} alt="realtime" />
+                        <img src={realtime} alt="realtime"/>
                     </div>
                 </section>
 
                 <section className="hero2">
                     <div className="hero-content">
                         <h2>
-                            AI 기반 맞춤형 채용 <br /> 공고 모니터링
+                            AI 기반 맞춤형 채용 <br/> 공고 모니터링
                         </h2>
                         <p>
-                            나의 직무에 맞는 채용 소식을 <br /> 매일 받아보세요.
+                            나의 직무에 맞는 채용 소식을 <br/> 매일 받아보세요.
                         </p>
                         <button className="job-btn">나의 직무 등록하기</button>
                     </div>
                     <div className="hero-image">
-                        <img src={ai} alt="ai" />
+                        <img src={ai} alt="ai"/>
                     </div>
                 </section>
             </div>
 
             {/* 카드 섹션 */}
-            <section className='card-section' style={{ width: "100%", margin: "0 auto" }}>
-                <h3
-                    style={{
-                        color: "#000000",
-                        fontSize: "40px",
-                        textAlign: "left",
-                        marginBottom: "20px"
-                    }}
-                >
-                    오늘의 추천 채용 공고
-                </h3>
-                <div
-                    style={{
-                        display: "grid",
-                        gap: "40px",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-                        width: "100%",
-                        justifyContent: "stretch"
-                    }}
-                >
-                    {Array.from({ length: 8 }).map((_, idx) => (
-                        <div key={idx} className="card">
-                            <img src={logo} alt="company" height="100px" width="150px" />
+            <section className="card-section">
+                <h3>오늘의 추천 채용 공고</h3>
+                <div style={{display: "grid", gap: "40px"}}>
+                    {jobs.map((job) => (
+                        <div
+                            key={job.empSeqno}
+                            className="card"
+                            style={{cursor: "pointer"}}
+                            onClick={() => handleCardClick(job)} // → 여기만 추가
+                        >
+                            <img
+                                src={job.regLogImgNm || defaultLogo}
+                                alt="company"
+                                height="100px"
+                                width="150px"
+                            />
                             <p id="d-day">D-10</p>
-                            <p id="company-name">(주)OO회사</p>
-                            <h4 id="job">직무 {idx + 1}</h4>
-                            <p id="description">서울 · 정규직</p>
+                            <p id="company-name">{job.empBusiNm}</p>
+                            <h4 id="job">{job.empWantedTitle}</h4>
+                            <p id="description">
+                                {job.location} · {job.empWantedTypeNm}
+                            </p>
                         </div>
                     ))}
                 </div>
+
+                {/* → 모달 */}
+                {selectedJob && (
+                    <EmploymentModal job={selectedJob} onClose={handleCloseModal} />
+                )}
             </section>
 
             {/* 챗봇 버튼 & 창 */}
