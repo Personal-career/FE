@@ -36,8 +36,19 @@
 
 .basic-info {
     text-align: left; /* 이미지 오른쪽 정보는 왼쪽 정렬 */
+    width: 250px;
+    height: 250px;
+    position: relative;
+    background: #f9f9fb;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
+.edit-form input {
+    width: 240px;
+    margin: 0 auto;
+}
 .interests, .projects {
     margin-top: 20px;
     text-align: center;
@@ -275,4 +286,77 @@
     width: 20px;
     height: 20px;
     background-color: #d37173;
+}
+/* 연필 버튼 */
+.edit-btn {
+    margin-left: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    font-size: 16px;
+    transition: color 0.2s ease;
+}
+
+.edit-btn:hover {
+    color: #007bff;
+}
+
+/* 수정 모드 input */
+.edit-form input {
+    display: block;
+    width: 90%;
+    margin: 6px 0;
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.edit-form input:focus {
+    border-color: #007bff;
+    background: #fff;
+}
+
+/* 수정 모드 버튼 영역 */
+.edit-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+}
+
+/* 완료 버튼 */
+.save-btn {
+    flex: 1;
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.save-btn:hover {
+    background: #218838;
+}
+
+/* 취소 버튼 */
+.cancel-btn {
+    flex: 1;
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.cancel-btn:hover {
+    background: #c82333;
 }

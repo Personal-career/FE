@@ -25,6 +25,10 @@ export default function Portfolio() {
         ]
     }), []);
 
+    const [user, setUser] = useState(initialUser);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editData, setEditData] = useState({ ...initialUser });
+
     const [desiredJobs, setDesiredJobs] = useState(initialUser.desiredJobs);
     const [techStack, setTechStack] = useState(initialUser.techStack);
 
@@ -37,14 +41,29 @@ export default function Portfolio() {
     const [techInput, setTechInput] = useState('');
 
     const [selectedProject, setSelectedProject] = useState(null);
-    const colors = ["#007bff", "#28a745", "#ffc107", "#dc3545", "#6f42c1"];
+    const colors = [
+        "#A7C7E7", // 파스텔 블루
+        "#B5EAD7", // 파스텔 민트
+        "#C7CEEA", // 파스텔 퍼플
+        "#FFDAC1", // 파스텔 오렌지
+        "#FFB7B2", // 파스텔 핑크
+        "#E2F0CB", // 파스텔 그린
+    ];
 
+    const getColorForItem = (item) => {
+        let hash = 0;
+        for (let i = 0; i < item.length; i++) {
+            hash = item.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        return colors[Math.abs(hash) % colors.length];
+    };
+/*
     const user = {
         ...initialUser,
         desiredJobs,
         techStack,
     };
-
+*/
     const toggleSelection = (section, value) => {
         const updater = section === 'desired' ? setSelectedDesired : setSelectedTech;
         const current = section === 'desired' ? selectedDesired : selectedTech;
@@ -84,7 +103,19 @@ export default function Portfolio() {
             });
         }
     };
+    const handleChange = (field, value) => {
+        setEditData(prev => ({ ...prev, [field]: value }));
+    };
 
+    const handleSave = () => {
+        setUser(editData);
+        setIsEditing(false);
+    };
+
+    const handleCancel = () => {
+        setEditData(user);
+        setIsEditing(false);
+    };
 
     const handleKeyDown = (e, section) => {
         if (e.key === 'Enter') {
@@ -102,10 +133,51 @@ export default function Portfolio() {
                         <div className={styles['profile-image']}></div>
 
                         <div className={styles['basic-info']}>
-                            <h3>기본 정보</h3>
-                            <p>{user.name}</p>
-                            <p>{user.phone}</p>
-                            <p>{user.address}</p>
+                            <h3>
+                                기본 정보
+                                {!isEditing && (
+                                    <button
+                                        className={styles['edit-btn']}
+                                        onClick={() => setIsEditing(true)}
+                                    >
+                                        ✏️
+                                    </button>
+                                )}
+                            </h3>
+                            {isEditing ? (
+                                <div className={styles['edit-form']}>
+                                    <input
+                                        type="text"
+                                        value={editData.name}
+                                        onChange={(e) => handleChange("name", e.target.value)}
+                                    />
+                                    <input
+                                        type="text"
+                                        value={editData.phone}
+                                        onChange={(e) => handleChange("phone", e.target.value)}
+                                    />
+                                    <input
+                                        type="text"
+                                        value={editData.address}
+                                        onChange={(e) => handleChange("address", e.target.value)}
+                                    />
+
+                                    <div className={styles['edit-actions']}>
+                                        <button onClick={handleSave} className={styles['save-btn']}>
+                                            ✔️ 완료
+                                        </button>
+                                        <button onClick={handleCancel} className={styles['cancel-btn']}>
+                                            ❌ 취소
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <>
+                                    <p>{user.name}</p>
+                                    <p>{user.phone}</p>
+                                    <p>{user.address}</p>
+                                </>
+                            )}
                         </div>
                     </div>
                     <div className={styles['interests']}>
@@ -115,7 +187,7 @@ export default function Portfolio() {
                                 <div
                                     key={idx}
                                     className={styles.circle}
-                                    style={{ backgroundColor: colors[idx % colors.length] }}
+                                    style={{ backgroundColor: getColorForItem(item)}}
                                     onClick={() => setDesiredJobs(item)}
                                 >
                                     <span className={styles['circle-text']}>{item[0]}</span>
@@ -131,7 +203,7 @@ export default function Portfolio() {
                                 <div
                                     key={idx}
                                     className={styles.circle}
-                                    style={{ backgroundColor: colors[idx % colors.length] }}
+                                    style={{ backgroundColor: getColorForItem(proj)}}
                                     onClick={() => setSelectedProject(proj)}
                                 >
                                     <span className={styles['circle-text']}>{proj.name[0]}</span>
