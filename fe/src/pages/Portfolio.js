@@ -6,6 +6,94 @@ import EmploymentModal from "../components/Employment";
 import defaultLogo from "../images/logo.png";
 
 export default function Portfolio() {
+    const initialUser = useMemo(() => ({
+        name: "홍길동",
+        phone: "010-1111-1111",
+        address: "서울시 OO구 OO동",
+        desiredJobs: ["프론트엔드", "백엔드", "풀스택"],
+        techStack: ["React", "Spring", "MySQL"],
+        interests: ["카카오", "네이버", "삼성"],
+        appliedJobs: [
+            {
+                empSeqno: "123456",
+                empWantedTitle: "프론트엔드 개발자",
+                empBusiNm: "신세계푸드",
+                empWantedTypeNm: "정규직",
+                empWantedStdt: "2025-08-20",
+                empWantedEndt: "2025-09-10",
+                empWantedHomepgDetail: "https://job.example.com/123456",
+                regLogImgNm: defaultLogo,
+                location: "서울"
+            },
+            {
+                empSeqno: "654321",
+                empWantedTitle: "백엔드 개발자",
+                empBusiNm: "OO회사",
+                empWantedTypeNm: "계약직",
+                empWantedStdt: "2025-08-22",
+                empWantedEndt: "2025-09-15",
+                empWantedHomepgDetail: "https://job.example.com/654321",
+                regLogImgNm: defaultLogo,
+                location: "부산"
+            },
+            {
+                empSeqno: "654321",
+                empWantedTitle: "백엔드 개발자",
+                empBusiNm: "OO회사",
+                empWantedTypeNm: "계약직",
+                empWantedStdt: "2025-08-22",
+                empWantedEndt: "2025-09-15",
+                empWantedHomepgDetail: "https://job.example.com/654321",
+                regLogImgNm: defaultLogo,
+                location: "부산"
+            },
+            {
+                empSeqno: "654321",
+                empWantedTitle: "백엔드 개발자",
+                empBusiNm: "OO회사",
+                empWantedTypeNm: "계약직",
+                empWantedStdt: "2025-08-22",
+                empWantedEndt: "2025-09-15",
+                empWantedHomepgDetail: "https://job.example.com/654321",
+                regLogImgNm: defaultLogo,
+                location: "부산"
+            },
+            {
+                empSeqno: "654321",
+                empWantedTitle: "백엔드 개발자",
+                empBusiNm: "OO회사",
+                empWantedTypeNm: "계약직",
+                empWantedStdt: "2025-08-22",
+                empWantedEndt: "2025-09-15",
+                empWantedHomepgDetail: "https://job.example.com/654321",
+                regLogImgNm: defaultLogo,
+                location: "부산"
+            },
+            {
+                empSeqno: "654321",
+                empWantedTitle: "백엔드 개발자",
+                empBusiNm: "OO회사",
+                empWantedTypeNm: "계약직",
+                empWantedStdt: "2025-08-22",
+                empWantedEndt: "2025-09-15",
+                empWantedHomepgDetail: "https://job.example.com/654321",
+                regLogImgNm: defaultLogo,
+                location: "부산"
+            },
+            {
+                empSeqno: "654321",
+                empWantedTitle: "백엔드 개발자",
+                empBusiNm: "OO회사",
+                empWantedTypeNm: "계약직",
+                empWantedStdt: "2025-08-22",
+                empWantedEndt: "2025-09-15",
+                empWantedHomepgDetail: "https://job.example.com/654321",
+                regLogImgNm: defaultLogo,
+                location: "부산"
+            }
+        ]
+    }), []);
+
     const fileInputRef = useRef(null);
     const [imagePreview, setImagePreview] = useState(null);
 
@@ -23,7 +111,32 @@ export default function Portfolio() {
     const [desiredInput, setDesiredInput] = useState('');
     const [techInput, setTechInput] = useState('');
 
+    const [projects, setProjects] = useState([]);
     const [selectedProject, setSelectedProject] = useState(null);
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    useEffect(() => {
+        const fetchProjects = async () => {
+            try {
+                const response = await axios.get("http://localhost:8080/portfolio");
+                const projects = response.data.map(p => ({
+                    ...p,
+                    techStack: Array.isArray(p.techStack) ? p.techStack : []
+                }));
+                setProjects(projects);
+            } catch (err) {
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProjects();
+    }, []);
+
+
+    if (loading) return <div>로딩 중...</div>;
+    if (error) return <div>오류 발생: {error.message}</div>;
 
     const colors = [
         "#A7C7E7", "#B5EAD7", "#C7CEEA",
@@ -237,14 +350,14 @@ export default function Portfolio() {
                     <div className={styles.projects}>
                         <h3>나의 프로젝트</h3>
                         <div className={styles['circle-list']}>
-                            {(user.projects || []).map((proj, idx) => (
+                            {projects.map((proj, idx) => (
                                 <div
-                                    key={idx}
+                                    key={proj.id ? proj.id : idx}
                                     className={styles.circle}
-                                    style={{ backgroundColor: getColorForItem(proj.name)}}
+                                    style={{ backgroundColor: getColorForItem(proj.name || `project-${idx}`) }}
                                     onClick={() => setSelectedProject(proj)}
                                 >
-                                    <span className={styles['circle-text']}>{proj.name[0]}</span>
+                                    <span className={styles['circle-text']}>{proj.name ? proj.name[0] : '?'}</span>
                                 </div>
                             ))}
                         </div>
@@ -305,8 +418,8 @@ export default function Portfolio() {
                     <div className={styles['applied-jobs']}>
                         <h3>지원한 공고</h3>
                         <div className={styles['job-cards']}>
-                            {(user.appliedJobs || []).map((job) => (
-                                <div key={job.empSeqno} className={styles['job-card']} onClick={() => setSelectedJob(job)}>
+                            {user.appliedJobs.map((job, idx) => (
+                                <div key={`${job.empSeqno}-${idx}`} className={styles['job-card']} onClick={() => setSelectedJob(job)}>
                                     <img
                                         src={job.regLogImgNm || defaultLogo}
                                         alt="company"
