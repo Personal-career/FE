@@ -2,6 +2,8 @@ import React, { useMemo, useState } from 'react';
 import styles from '../styles/Portfolio.module.css';
 import logo from "../images/logo.png";
 import ProjectModal from "../components/ProjectModal";
+import EmploymentModal from "../components/Employment";
+import defaultLogo from "../images/logo.png";
 
 export default function Portfolio() {
     const initialUser = useMemo(() => ({
@@ -17,11 +19,83 @@ export default function Portfolio() {
             { name: "프로젝트 C", period: "3개월", type: "백엔드 개발", award: "없음", description: "API 서버 제작", techStack: ["Spring", "MySQL"] }
         ],
         appliedJobs: [
-            { company: "OO 기업", deadline: "마감 5일 전", type: "신입 및 경력 사원 모집" },
-            { company: "OO 기업", deadline: "마감 5일 전", type: "신입 및 경력 사원 모집" },
-            { company: "OO 기업", deadline: "마감 5일 전", type: "신입 및 경력 사원 모집" },
-            { company: "OO 기업", deadline: "마감 5일 전", type: "신입 및 경력 사원 모집" },
-            { company: "OO 기업", deadline: "마감 5일 전", type: "신입 및 경력 사원 모집" }
+            {
+                empSeqno: "123456",
+                empWantedTitle: "프론트엔드 개발자",
+                empBusiNm: "신세계푸드",
+                empWantedTypeNm: "정규직",
+                empWantedStdt: "2025-08-20",
+                empWantedEndt: "2025-09-10",
+                empWantedHomepgDetail: "https://job.example.com/123456",
+                regLogImgNm: defaultLogo,
+                location: "서울"
+            },
+            {
+                empSeqno: "654321",
+                empWantedTitle: "백엔드 개발자",
+                empBusiNm: "OO회사",
+                empWantedTypeNm: "계약직",
+                empWantedStdt: "2025-08-22",
+                empWantedEndt: "2025-09-15",
+                empWantedHomepgDetail: "https://job.example.com/654321",
+                regLogImgNm: defaultLogo,
+                location: "부산"
+            },
+            {
+                empSeqno: "654321",
+                empWantedTitle: "백엔드 개발자",
+                empBusiNm: "OO회사",
+                empWantedTypeNm: "계약직",
+                empWantedStdt: "2025-08-22",
+                empWantedEndt: "2025-09-15",
+                empWantedHomepgDetail: "https://job.example.com/654321",
+                regLogImgNm: defaultLogo,
+                location: "부산"
+            },
+            {
+                empSeqno: "654321",
+                empWantedTitle: "백엔드 개발자",
+                empBusiNm: "OO회사",
+                empWantedTypeNm: "계약직",
+                empWantedStdt: "2025-08-22",
+                empWantedEndt: "2025-09-15",
+                empWantedHomepgDetail: "https://job.example.com/654321",
+                regLogImgNm: defaultLogo,
+                location: "부산"
+            },
+            {
+                empSeqno: "654321",
+                empWantedTitle: "백엔드 개발자",
+                empBusiNm: "OO회사",
+                empWantedTypeNm: "계약직",
+                empWantedStdt: "2025-08-22",
+                empWantedEndt: "2025-09-15",
+                empWantedHomepgDetail: "https://job.example.com/654321",
+                regLogImgNm: defaultLogo,
+                location: "부산"
+            },
+            {
+                empSeqno: "654321",
+                empWantedTitle: "백엔드 개발자",
+                empBusiNm: "OO회사",
+                empWantedTypeNm: "계약직",
+                empWantedStdt: "2025-08-22",
+                empWantedEndt: "2025-09-15",
+                empWantedHomepgDetail: "https://job.example.com/654321",
+                regLogImgNm: defaultLogo,
+                location: "부산"
+            },
+            {
+                empSeqno: "654321",
+                empWantedTitle: "백엔드 개발자",
+                empBusiNm: "OO회사",
+                empWantedTypeNm: "계약직",
+                empWantedStdt: "2025-08-22",
+                empWantedEndt: "2025-09-15",
+                empWantedHomepgDetail: "https://job.example.com/654321",
+                regLogImgNm: defaultLogo,
+                location: "부산"
+            }
         ]
     }), []);
 
@@ -35,6 +109,7 @@ export default function Portfolio() {
     // 선택 상태 (Set 사용: 빠른 토글/존재확인)
     const [selectedDesired, setSelectedDesired] = useState(new Set());
     const [selectedTech, setSelectedTech] = useState(new Set());
+    const [selectedJob, setSelectedJob] = useState(null);
 
     // 입력값 (새 태그 추가)
     const [desiredInput, setDesiredInput] = useState('');
@@ -264,12 +339,20 @@ export default function Portfolio() {
                     <div className={styles['applied-jobs']}>
                         <h3>지원한 공고</h3>
                         <div className={styles['job-cards']}>
-                            {user.appliedJobs.map((job, idx) => (
-                                <div key={idx} className={styles['job-card']}>
-                                    <p>{job.deadline}</p>
-                                    <div className={styles.circle}></div>
-                                    <h4>{job.company}</h4>
-                                    <p>{job.type}</p>
+                            {user.appliedJobs.map((job) => (
+                                <div key={job.empSeqno} className={styles['job-card']} onClick={() => setSelectedJob(job)}>
+                                    <img
+                                        src={job.regLogImgNm || defaultLogo}
+                                        alt="company"
+                                        height="100px"
+                                        width="150px"
+                                    />
+                                    <p id={styles['d-day']}>D-10</p>
+                                    <p id="company-name">{job.empBusiNm}</p>
+                                    <h4 id="job">{job.empWantedTitle}</h4>
+                                    <p id="description">
+                                        {job.location} · {job.empWantedTypeNm}
+                                    </p>
                                 </div>
                             ))}
                         </div>
@@ -286,6 +369,12 @@ export default function Portfolio() {
                                 setSelectedProject(updatedProject);
                                 // TODO: 추후 DB 반영
                             }}
+                        />
+                    )}
+                    {selectedJob && (
+                        <EmploymentModal
+                            job={selectedJob}
+                            onClose={() => setSelectedJob(null)}
                         />
                     )}
                 </div>

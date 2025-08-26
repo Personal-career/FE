@@ -36,7 +36,62 @@ export default function HomePage() {
             empWantedHomepgDetail: "https://job.example.com/654321",
             regLogImgNm: defaultLogo,
             location: "부산"
-        }
+        },
+        {
+            empSeqno: "654321",
+            empWantedTitle: "백엔드 개발자",
+            empBusiNm: "OO회사",
+            empWantedTypeNm: "계약직",
+            empWantedStdt: "2025-08-22",
+            empWantedEndt: "2025-09-15",
+            empWantedHomepgDetail: "https://job.example.com/654321",
+            regLogImgNm: defaultLogo,
+            location: "부산"
+        },
+        {
+            empSeqno: "654321",
+            empWantedTitle: "백엔드 개발자",
+            empBusiNm: "OO회사",
+            empWantedTypeNm: "계약직",
+            empWantedStdt: "2025-08-22",
+            empWantedEndt: "2025-09-15",
+            empWantedHomepgDetail: "https://job.example.com/654321",
+            regLogImgNm: defaultLogo,
+            location: "부산"
+        },
+        {
+            empSeqno: "654321",
+            empWantedTitle: "백엔드 개발자",
+            empBusiNm: "OO회사",
+            empWantedTypeNm: "계약직",
+            empWantedStdt: "2025-08-22",
+            empWantedEndt: "2025-09-15",
+            empWantedHomepgDetail: "https://job.example.com/654321",
+            regLogImgNm: defaultLogo,
+            location: "부산"
+        },
+        {
+            empSeqno: "654321",
+            empWantedTitle: "백엔드 개발자",
+            empBusiNm: "OO회사",
+            empWantedTypeNm: "계약직",
+            empWantedStdt: "2025-08-22",
+            empWantedEndt: "2025-09-15",
+            empWantedHomepgDetail: "https://job.example.com/654321",
+            regLogImgNm: defaultLogo,
+            location: "부산"
+        },
+        {
+            empSeqno: "654321",
+            empWantedTitle: "백엔드 개발자",
+            empBusiNm: "OO회사",
+            empWantedTypeNm: "계약직",
+            empWantedStdt: "2025-08-22",
+            empWantedEndt: "2025-09-15",
+            empWantedHomepgDetail: "https://job.example.com/654321",
+            regLogImgNm: defaultLogo,
+            location: "부산"
+        },
     ];
 
     // → 카드 클릭 시 모달 열기
@@ -88,14 +143,9 @@ export default function HomePage() {
             {/* 카드 섹션 */}
             <section className="card-section">
                 <h3>오늘의 추천 채용 공고</h3>
-                <div style={{display: "grid", gap: "40px"}}>
+                <div className="card-grid">
                     {jobs.map((job) => (
-                        <div
-                            key={job.empSeqno}
-                            className="card"
-                            style={{cursor: "pointer"}}
-                            onClick={() => handleCardClick(job)} // → 여기만 추가
-                        >
+                        <div key={job.empSeqno} className="card" onClick={() => handleCardClick(job)}>
                             <img
                                 src={job.regLogImgNm || defaultLogo}
                                 alt="company"

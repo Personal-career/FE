@@ -26,12 +26,13 @@ const EmploymentModal = ({ job, onClose }) => {
                     />
 
                     <div className="employment-header-text">
-                        <h2 className="employment-title">{job.empWantedTitle}</h2>
+                        <h2 className="employment-title">{job.empBusiNm}</h2>
+                        <button className="favorite-btn" onClick={toggleFavorite}>
+                            {isFavorite ? "💙" : "🤍"}
+                        </button>
                         <div className="company-favorite">
-                            <p className="employment-company">{job.empBusiNm}</p>
-                            <button className="favorite-btn" onClick={toggleFavorite}>
-                                {isFavorite ? "💙" : "🤍"}
-                            </button>
+                            <p className="employment-company">{job.empWantedTitle}</p>
+
                         </div>
                     </div>
                 </div>
@@ -43,6 +44,9 @@ const EmploymentModal = ({ job, onClose }) => {
                     </p>
                     <p className="employment-info">
                         <span>고용형태:</span> {job.empWantedTypeNm}
+                    </p>
+                    <p className="employment-info">
+                        <span>위치:</span> {job.location}
                     </p>
                     <a
                         href={job.empWantedHomepgDetail}
