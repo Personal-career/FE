@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from '../styles/Register.module.css';
 
 export default function Register() {
@@ -6,6 +7,7 @@ export default function Register() {
     const [memberId, setMemberId] = useState('');
     const [pw, setPw] = useState('');
     const [email, setEmail] = useState('');
+    const navigate = useNavigate();
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -24,6 +26,7 @@ export default function Register() {
 
             const message = await response.text();
             alert(message);
+            navigate("/login");
         } catch (err) {
             alert("회원가입 실패: " + err.message);
         }

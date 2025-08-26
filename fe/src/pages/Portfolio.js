@@ -1,7 +1,6 @@
-import React, { useMemo, useState, useEffect } from 'react'; // useEffect 추가
-import axios from 'axios';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
+import axios from "axios";
 import styles from '../styles/Portfolio.module.css';
-import logo from "../images/logo.png";
 import ProjectModal from "../components/ProjectModal";
 import EmploymentModal from "../components/Employment";
 import defaultLogo from "../images/logo.png";
@@ -95,19 +94,20 @@ export default function Portfolio() {
         ]
     }), []);
 
-    const [user, setUser] = useState(initialUser);
+    const fileInputRef = useRef(null);
+    const [imagePreview, setImagePreview] = useState(null);
+
+    const [user, setUser] = useState(null); // 초기값 null
+    const [editData, setEditData] = useState({});
     const [isEditing, setIsEditing] = useState(false);
-    const [editData, setEditData] = useState({ ...initialUser });
 
-    const [desiredJobs, setDesiredJobs] = useState(initialUser.desiredJobs);
-    const [techStack, setTechStack] = useState(initialUser.techStack);
+    const [desiredJobs, setDesiredJobs] = useState([]);
+    const [techStack, setTechStack] = useState([]);
 
-    // 선택 상태 (Set 사용: 빠른 토글/존재확인)
     const [selectedDesired, setSelectedDesired] = useState(new Set());
     const [selectedTech, setSelectedTech] = useState(new Set());
     const [selectedJob, setSelectedJob] = useState(null);
 
-    // 입력값 (새 태그 추가)
     const [desiredInput, setDesiredInput] = useState('');
     const [techInput, setTechInput] = useState('');
 
@@ -139,12 +139,8 @@ export default function Portfolio() {
     if (error) return <div>오류 발생: {error.message}</div>;
 
     const colors = [
-        "#A7C7E7", // 파스텔 블루
-        "#B5EAD7", // 파스텔 민트
-        "#C7CEEA", // 파스텔 퍼플
-        "#FFDAC1", // 파스텔 오렌지
-        "#FFB7B2", // 파스텔 핑크
-        "#E2F0CB", // 파스텔 그린
+        "#A7C7E7", "#B5EAD7", "#C7CEEA",
+        "#FFDAC1", "#FFB7B2", "#E2F0CB",
     ];
 
     const getColorForItem = (item) => {
@@ -154,13 +150,7 @@ export default function Portfolio() {
         }
         return colors[Math.abs(hash) % colors.length];
     };
-/*
-    const user = {
-        ...initialUser,
-        desiredJobs,
-        techStack,
-    };
-*/
+
     const toggleSelection = (section, value) => {
         const updater = section === 'desired' ? setSelectedDesired : setSelectedTech;
         const current = section === 'desired' ? selectedDesired : selectedTech;
@@ -200,13 +190,30 @@ export default function Portfolio() {
             });
         }
     };
+
     const handleChange = (field, value) => {
         setEditData(prev => ({ ...prev, [field]: value }));
     };
 
-    const handleSave = () => {
-        setUser(editData);
-        setIsEditing(false);
+    const handleSave = async () => {
+        try {
+            const response = await axios.put(
+                `http://localhost:8080/member/${user.id}`,
+                {
+                    name: editData.name,
+                    phone: editData.phone,
+                    email: editData.email,
+                },
+                { headers: { "Content-Type": "application/json" } }
+            );
+            setUser(response.data);
+            setEditData(response.data);
+            setIsEditing(false);
+            alert("정보가 수정되었습니다.");
+        } catch (error) {
+            console.error("정보 수정 실패:", error);
+            alert("정보 수정에 실패했습니다.");
+        }
     };
 
     const handleCancel = () => {
@@ -221,14 +228,59 @@ export default function Portfolio() {
         }
     };
 
+    const handleDivClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onloadend = () => setImagePreview(reader.result);
+        reader.readAsDataURL(file);
+    };
+
+    // ✅ DB에서 회원 정보 불러오기
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/member/1`); // id 1 예시
+                const data = response.data;
+                setUser(data);
+                setEditData(data);
+                setDesiredJobs(data.desiredJobs || []);
+                setTechStack(data.techStack || []);
+            } catch (error) {
+                console.error("회원 정보 불러오기 실패:", error);
+            }
+        };
+        fetchUser();
+    }, []);
+
+    if (!user) return <p>회원 정보를 불러오는 중...</p>; // 로딩 처리
 
     return (
         <div className={styles['profile-page']}>
             <div className={styles['profile-container']}>
                 <div className={styles['profile-left']}>
                     <div className={styles['profile-image-info']}>
-                        <div className={styles['profile-image']}></div>
-
+                        <div
+                            className={styles['profile-image']}
+                            onClick={handleDivClick}
+                            style={{
+                                backgroundImage: imagePreview ? `url(${imagePreview})` : 'none',
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                cursor: 'pointer',
+                            }}
+                        ></div>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            style={{ display: 'none' }}
+                        />
                         <div className={styles['basic-info']}>
                             <h3>
                                 기본 정보
@@ -255,10 +307,9 @@ export default function Portfolio() {
                                     />
                                     <input
                                         type="text"
-                                        value={editData.address}
-                                        onChange={(e) => handleChange("address", e.target.value)}
+                                        value={editData.email}
+                                        onChange={(e) => handleChange("email", e.target.value)}
                                     />
-
                                     <div className={styles['edit-actions']}>
                                         <button onClick={handleSave} className={styles['save-btn']}>
                                             ✔️ 완료
@@ -272,15 +323,17 @@ export default function Portfolio() {
                                 <>
                                     <p>{user.name}</p>
                                     <p>{user.phone}</p>
-                                    <p>{user.address}</p>
+                                    <p>{user.email}</p>
                                 </>
                             )}
                         </div>
                     </div>
+
+                    {/* 관심 기업 */}
                     <div className={styles['interests']}>
                         <h3>관심 기업</h3>
                         <div className={styles['circle-list']}>
-                            {initialUser.interests.map((item, idx) => (
+                            {(user.interests || []).map((item, idx) => (
                                 <div
                                     key={idx}
                                     className={styles.circle}
@@ -293,6 +346,7 @@ export default function Portfolio() {
                         </div>
                     </div>
 
+                    {/* 프로젝트 */}
                     <div className={styles.projects}>
                         <h3>나의 프로젝트</h3>
                         <div className={styles['circle-list']}>
@@ -310,7 +364,9 @@ export default function Portfolio() {
                     </div>
                 </div>
 
+                {/* 우측 영역 */}
                 <div className={styles['profile-right']}>
+                    {/* 희망 직무 */}
                     <div className={styles['desired-jobs']}>
                         <h3>희망 직무</h3>
                         <div className={styles['tag-row']}>
@@ -334,6 +390,7 @@ export default function Portfolio() {
                         </div>
                     </div>
 
+                    {/* 기술 스택 */}
                     <div className={styles['tech-stack']}>
                         <h3>기술 스택</h3>
                         <div className={styles['tag-row']}>
@@ -344,7 +401,6 @@ export default function Portfolio() {
                                 </div>
                             ))}
                         </div>
-
                         <div className={styles['tag-input-row']}>
                             <input
                                 type="text"
@@ -358,6 +414,7 @@ export default function Portfolio() {
                         </div>
                     </div>
 
+                    {/* 지원한 공고 */}
                     <div className={styles['applied-jobs']}>
                         <h3>지원한 공고</h3>
                         <div className={styles['job-cards']}>
@@ -380,17 +437,14 @@ export default function Portfolio() {
                         </div>
                     </div>
                 </div>
+
+                {/* 모달 */}
                 <div className={styles['profile-modal']}>
-                    {/* 오른쪽 상세 정보 탭 */}
                     {selectedProject && (
                         <ProjectModal
                             project={selectedProject}
                             onClose={() => setSelectedProject(null)}
-                            onUpdate={(updatedProject) => {
-                                console.log("업데이트된 프로젝트:", updatedProject);
-                                setSelectedProject(updatedProject);
-                                // TODO: 추후 DB 반영
-                            }}
+                            onUpdate={(updatedProject) => setSelectedProject(updatedProject)}
                         />
                     )}
                     {selectedJob && (
