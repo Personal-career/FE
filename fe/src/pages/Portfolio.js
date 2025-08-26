@@ -135,8 +135,6 @@ export default function Portfolio() {
     }, []);
 
 
-    if (loading) return <div>로딩 중...</div>;
-    if (error) return <div>오류 발생: {error.message}</div>;
 
     const colors = [
         "#A7C7E7", "#B5EAD7", "#C7CEEA",
@@ -317,6 +315,8 @@ export default function Portfolio() {
 
     if (!user) return <p>회원 정보를 불러오는 중...</p>; // 로딩 처리
 
+    if (loading) return <div>로딩 중...</div>;
+    if (error) return <div>오류 발생: {error.message}</div>;
     return (
         <div className={styles['profile-page']}>
             <div className={styles['profile-container']}>
@@ -476,7 +476,7 @@ export default function Portfolio() {
                     <div className={styles['applied-jobs']}>
                         <h3>지원한 공고</h3>
                         <div className={styles['job-cards']}>
-                            {user.appliedJobs.map((job, idx) => (
+                            {(user.appliedJobs || []).map((job, idx) => (
                                 <div key={`${job.empSeqno}-${idx}`} className={styles['job-card']} onClick={() => setSelectedJob(job)}>
                                     <img
                                         src={job.regLogImgNm || defaultLogo}
