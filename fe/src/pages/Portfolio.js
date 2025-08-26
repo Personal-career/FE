@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react'; // useEffect 추가
+import axios from 'axios';
 import styles from '../styles/Portfolio.module.css';
 import logo from "../images/logo.png";
 import ProjectModal from "../components/ProjectModal";
@@ -13,11 +14,6 @@ export default function Portfolio() {
         desiredJobs: ["프론트엔드", "백엔드", "풀스택"],
         techStack: ["React", "Spring", "MySQL"],
         interests: ["카카오", "네이버", "삼성"],
-        projects: [
-            { name: "프로젝트 A", period: "1개월", type: "웹 개발", award: "없음", description: "간단한 웹사이트 제작", techStack: ["React", "CSS"] },
-            { name: "프로젝트 B", period: "2개월", type: "앱 개발", award: "없음", description: "모바일 앱 제작", techStack: ["React Native", "Node.js"] },
-            { name: "프로젝트 C", period: "3개월", type: "백엔드 개발", award: "없음", description: "API 서버 제작", techStack: ["Spring", "MySQL"] }
-        ],
         appliedJobs: [
             {
                 empSeqno: "123456",
@@ -115,7 +111,33 @@ export default function Portfolio() {
     const [desiredInput, setDesiredInput] = useState('');
     const [techInput, setTechInput] = useState('');
 
+    const [projects, setProjects] = useState([]);
     const [selectedProject, setSelectedProject] = useState(null);
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    useEffect(() => {
+        const fetchProjects = async () => {
+            try {
+                const response = await axios.get("http://localhost:8080/portfolio");
+                const projects = response.data.map(p => ({
+                    ...p,
+                    techStack: Array.isArray(p.techStack) ? p.techStack : []
+                }));
+                setProjects(projects);
+            } catch (err) {
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProjects();
+    }, []);
+
+
+    if (loading) return <div>로딩 중...</div>;
+    if (error) return <div>오류 발생: {error.message}</div>;
+
     const colors = [
         "#A7C7E7", // 파스텔 블루
         "#B5EAD7", // 파스텔 민트
@@ -274,14 +296,14 @@ export default function Portfolio() {
                     <div className={styles.projects}>
                         <h3>나의 프로젝트</h3>
                         <div className={styles['circle-list']}>
-                            {initialUser.projects.map((proj, idx) => (
+                            {projects.map((proj, idx) => (
                                 <div
-                                    key={idx}
+                                    key={proj.id ? proj.id : idx}
                                     className={styles.circle}
-                                    style={{ backgroundColor: getColorForItem(proj)}}
+                                    style={{ backgroundColor: getColorForItem(proj.name || `project-${idx}`) }}
                                     onClick={() => setSelectedProject(proj)}
                                 >
-                                    <span className={styles['circle-text']}>{proj.name[0]}</span>
+                                    <span className={styles['circle-text']}>{proj.name ? proj.name[0] : '?'}</span>
                                 </div>
                             ))}
                         </div>
@@ -339,8 +361,8 @@ export default function Portfolio() {
                     <div className={styles['applied-jobs']}>
                         <h3>지원한 공고</h3>
                         <div className={styles['job-cards']}>
-                            {user.appliedJobs.map((job) => (
-                                <div key={job.empSeqno} className={styles['job-card']} onClick={() => setSelectedJob(job)}>
+                            {user.appliedJobs.map((job, idx) => (
+                                <div key={`${job.empSeqno}-${idx}`} className={styles['job-card']} onClick={() => setSelectedJob(job)}>
                                     <img
                                         src={job.regLogImgNm || defaultLogo}
                                         alt="company"

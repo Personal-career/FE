@@ -1,0 +1,112 @@
+/* 오버레이 (검은 반투명 배경) */
+.chatbot-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* 검은색 투명도 */
+    display: flex;
+    align-items: flex-end; /* 챗봇이 오른쪽 하단에 뜨도록 */
+    justify-content: flex-end;
+    z-index: 999;
+    animation: fadeIn 0.3s ease;
+}
+
+/* 모달 본체 */
+.chatbot-container {
+    width: 300px;
+    height: 400px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    margin: 20px; /* 화면 끝에서 약간 띄우기 */
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+/* 애니메이션 정의 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px); /* 아래에서 올라오는 효과 */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* 기존 스타일은 그대로 유지 */
+.chatbot-header {
+    padding: 10px;
+    background: #1E3A5F;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chatbot-header button {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.chatbot-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.chatbot-message {
+    margin: 4px 0;
+}
+
+.chatbot-message span {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 12px;
+}
+
+.user {
+    text-align: right;
+}
+.user span {
+    background: #BEDDFF;
+}
+
+.bot {
+    text-align: left;
+}
+.bot span {
+    background: #E5E5E5;
+}
+
+.chatbot-input {
+    display: flex;
+    border-top: 1px solid #ccc;
+}
+
+.chatbot-input input {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    outline: none;
+}
+
+.chatbot-input button {
+    padding: 10px 14px;
+    border: none;
+    background: #1E3A5F;
+    color: #fff;
+    cursor: pointer;
+}
