@@ -313,10 +313,10 @@ export default function Portfolio() {
     }, []);
 
 
-    if (!user) return <p>회원 정보를 불러오는 중...</p>; // 로딩 처리
+    if (!user) return <p className={styles['info']}>회원 정보를 불러오는 중...</p>; // 로딩 처리
 
-    if (loading) return <div>로딩 중...</div>;
-    if (error) return <div>오류 발생: {error.message}</div>;
+    if (loading) return <div className={styles['info']}>로딩 중...</div>;
+    if (error) return <div className={styles['info']}>오류 발생: {error.message}</div>;
     return (
         <div className={styles['profile-page']}>
             <div className={styles['profile-container']}>
@@ -387,43 +387,6 @@ export default function Portfolio() {
                         </div>
                     </div>
 
-                    {/* 관심 기업 */}
-                    <div className={styles['interests']}>
-                        <h3>관심 기업</h3>
-                        <div className={styles['circle-list']}>
-                            {(user.interests || []).map((item, idx) => (
-                                <div
-                                    key={idx}
-                                    className={styles.circle}
-                                    style={{ backgroundColor: getColorForItem(item)}}
-                                    onClick={() => setDesiredJobs(item)}
-                                >
-                                    <span className={styles['circle-text']}>{item[0]}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* 프로젝트 */}
-                    <div className={styles.projects}>
-                        <h3>나의 프로젝트</h3>
-                        <div className={styles['circle-list']}>
-                            {projects.map((proj, idx) => (
-                                <div
-                                    key={proj.id ? proj.id : idx}
-                                    className={styles.circle}
-                                    style={{ backgroundColor: getColorForItem(proj.name || `project-${idx}`) }}
-                                    onClick={() => setSelectedProject(proj)}
-                                >
-                                    <span className={styles['circle-text']}>{proj.name ? proj.name[0] : '?'}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* 우측 영역 */}
-                <div className={styles['profile-right']}>
                     {/* 희망 직무 */}
                     <div className={styles['desired-jobs']}>
                         <h3>희망 직무</h3>
@@ -471,6 +434,47 @@ export default function Portfolio() {
                             <button type="button" className={styles['add-btn']} onClick={() => addTag('tech')}>추가</button>
                         </div>
                     </div>
+
+                </div>
+
+                {/* 우측 영역 */}
+                <div className={styles['profile-right']}>
+
+
+                    {/* 관심 기업 */}
+                    <div className={styles['interests']}>
+                        <h3>관심 기업</h3>
+                        <div className={styles['circle-list']}>
+                            {(user.interests || []).map((item, idx) => (
+                                <div
+                                    key={idx}
+                                    className={styles.circle}
+                                    style={{ backgroundColor: getColorForItem(item)}}
+                                    onClick={() => setDesiredJobs(item)}
+                                >
+                                    <span className={styles['circle-text']}>{item[0]}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* 프로젝트 */}
+                    <div className={styles.projects}>
+                        <h3>나의 프로젝트</h3>
+                        <div className={styles['circle-list']}>
+                            {projects.map((proj, idx) => (
+                                <div
+                                    key={proj.id ? proj.id : idx}
+                                    className={styles.circle}
+                                    style={{ backgroundColor: getColorForItem(proj.name || `project-${idx}`) }}
+                                    onClick={() => setSelectedProject(proj)}
+                                >
+                                    <span className={styles['circle-text']}>{proj.name ? proj.name[0] : '?'}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
 
                     {/* 지원한 공고 */}
                     <div className={styles['applied-jobs']}>

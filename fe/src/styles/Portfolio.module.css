@@ -51,12 +51,13 @@
 }
 .interests, .projects {
     margin-top: 20px;
-    text-align: center;
+    text-align: left;
+    height: 100px;
 }
 
 .circle-list {
     display: flex;
-    justify-content: center;
+    justify-content: left;
     gap: 10px;
     margin-top: 10px;
 }
@@ -415,4 +416,7 @@ p.job-card {
     border-radius: 7px;
     font-weight: bold;
     font-size: 12px;
+}
+.info {
+    text-align: center;
 }
