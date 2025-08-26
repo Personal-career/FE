@@ -104,9 +104,8 @@
 }
 
 .job-card {
-    padding: 10px;
+    padding: 0;
     border-radius: 10px;
-    width: 150px;
     text-align: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
@@ -359,4 +358,61 @@
 
 .cancel-btn:hover {
     background: #c82333;
+}
+
+.job-card {
+    position: relative;        /* D-Day 절대 위치 기준 */
+    width: 170px;               /* 부모 그리드 셀 크기 채움 */
+    height: 200px;
+    font-size: small;
+    max-width: 300px;          /* 카드 최대폭 */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    background-color: #fff;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+p.job-card {
+    padding: 0;
+}
+.job-card img {
+    max-width: 70%;            /* 이미지 크기 조금 줄이기 */
+    height: auto;
+    display: block;
+    margin: 0 auto 5px auto;   /* 이미지 밑에 살짝 여백만 */
+}
+
+.job-card p,
+.job-card h4 {
+    margin: 4px 0;             /* 위아래 여백 최소화 */
+    line-height: 1.2;          /* 줄 간격 줄이기 */
+}
+
+.job-card h4#job {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#company-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+}
+
+#description {
+    font-size: 12px;
+    color: #666;
+}
+#d-day {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #4B83C1;
+    color: #fff;
+    padding: 4px 9px;
+    border-radius: 7px;
+    font-weight: bold;
+    font-size: 12px;
 }
