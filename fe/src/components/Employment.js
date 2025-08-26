@@ -19,6 +19,7 @@ const EmploymentModal = ({ job, onClose }) => {
 
                 {/* 상단 로고 + title/회사명 + 하트 */}
                 <div className="employment-header">
+
                     <img
                         src={job.regLogImgNm || defaultLogo}
                         alt={`${job.empBusiNm} 로고`}
