@@ -64,7 +64,7 @@
 
 /* 로고 */
 .employment-logo {
-    position: fixed;
+    position: absolute;
     left: 60px;
     width: 200px;
     height: auto;
