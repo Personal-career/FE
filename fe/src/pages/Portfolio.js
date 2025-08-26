@@ -159,30 +159,85 @@ export default function Portfolio() {
         updater(next);
     };
 
-    const addTag = (section) => {
+    const addTag = async (section) => {
         if (section === 'desired') {
             const name = desiredInput.trim();
             if (!name) return;
-            if (!desiredJobs.includes(name)) setDesiredJobs(prev => [...prev, name]);
-            setDesiredInput('');
+            if (!desiredJobs.includes(name)) {
+                const newDesiredJobs = [...desiredJobs, name];
+                setDesiredJobs(newDesiredJobs);
+                setDesiredInput('');
+
+                try {
+                    await axios.put(
+                        `http://localhost:8080/member/${user.id}/roles`,
+                        newDesiredJobs,
+                        { headers: { "Content-Type": "application/json" } }
+                    );
+                } catch (error) {
+                    console.error("희망 직무 업데이트 실패:", error);
+                    alert("직무 추가에 실패했습니다.");
+                }
+            }
         } else {
             const name = techInput.trim();
             if (!name) return;
-            if (!techStack.includes(name)) setTechStack(prev => [...prev, name]);
-            setTechInput('');
+            if (!techStack.includes(name)) {
+                const newTechStack = [...techStack, name];
+                setTechStack(newTechStack);
+
+                try {
+                    await axios.put(
+                        `http://localhost:8080/member/${user.id}/skills`,
+                        newTechStack,
+                        { headers: { "Content-Type": "application/json" } }
+                    );
+                } catch (error) {
+                    console.error("기술 스택 업데이트 실패:", error);
+                    alert("스택 추가에 실패했습니다.");
+                }
+
+                setTechInput('');
+            }
         }
     };
 
-    const removeTag = (section, value) => {
+    const removeTag = async (section, value) => {
         if (section === 'desired') {
-            setDesiredJobs(prev => prev.filter(job => job !== value));
+            const updated = desiredJobs.filter(job => job !== value);
+            setDesiredJobs(updated);
+
+            try {
+                await axios.put(
+                    `http://localhost:8080/member/${user.id}/roles`,
+                    updated,
+                    { headers: { "Content-Type": "application/json" } }
+                );
+            } catch (error) {
+                console.error("희망 직무 삭제 실패:", error);
+                alert("직무 삭제에 실패했습니다.");
+            }
+
             setSelectedDesired(prev => {
                 const next = new Set(prev);
                 next.delete(value);
                 return next;
             });
         } else {
-            setTechStack(prev => prev.filter(tech => tech !== value));
+            const updated = techStack.filter(tech => tech !== value);
+            setTechStack(updated);
+
+            try {
+                await axios.put(
+                    `http://localhost:8080/member/${user.id}/tech-stack`,
+                    updated,
+                    { headers: { "Content-Type": "application/json" } }
+                );
+            } catch (error) {
+                console.error("기술 스택 삭제 실패:", error);
+                alert("스택 삭제에 실패했습니다.");
+            }
+
             setSelectedTech(prev => {
                 const next = new Set(prev);
                 next.delete(value);
@@ -221,8 +276,8 @@ export default function Portfolio() {
         setIsEditing(false);
     };
 
-    const handleKeyDown = (e, section) => {
-        if (e.key === 'Enter') {
+    const handleKeyUp = (e, section) => {
+        if (e.key === 'Enter' && e.nativeEvent.isComposing === false) {
             e.preventDefault();
             addTag(section);
         }
@@ -244,18 +299,21 @@ export default function Portfolio() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/member/1`); // id 1 예시
+                const response = await axios.get(`http://localhost:8080/member/1`);
                 const data = response.data;
                 setUser(data);
                 setEditData(data);
-                setDesiredJobs(data.desiredJobs || []);
-                setTechStack(data.techStack || []);
+
+                // ✅ 여기서 서버 데이터 초기 세팅
+                setDesiredJobs(data.desiredRoles || []);
+                setTechStack(data.skills || []);
             } catch (error) {
                 console.error("회원 정보 불러오기 실패:", error);
             }
         };
         fetchUser();
     }, []);
+
 
     if (!user) return <p>회원 정보를 불러오는 중...</p>; // 로딩 처리
 
@@ -383,7 +441,7 @@ export default function Portfolio() {
                                 placeholder="새 직무 입력 후 Enter"
                                 value={desiredInput}
                                 onChange={(e) => setDesiredInput(e.target.value)}
-                                onKeyDown={(e) => handleKeyDown(e, 'desired')}
+                                onKeyDown={(e) => handleKeyUp(e, 'desired')}
                                 className="tag-input"
                             />
                             <button type="button" className={styles['add-btn']} onClick={() => addTag('desired')}>추가</button>
@@ -407,7 +465,7 @@ export default function Portfolio() {
                                 placeholder="새 스택 입력 후 Enter"
                                 value={techInput}
                                 onChange={(e) => setTechInput(e.target.value)}
-                                onKeyDown={(e) => handleKeyDown(e, 'tech')}
+                                onKeyDown={(e) => handleKeyUp(e, 'tech')}
                                 className="tag-input"
                             />
                             <button type="button" className={styles['add-btn']} onClick={() => addTag('tech')}>추가</button>
