@@ -1,128 +1,33 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
+import axios from "axios";
 import styles from '../styles/Portfolio.module.css';
-import logo from "../images/logo.png";
 import ProjectModal from "../components/ProjectModal";
 import EmploymentModal from "../components/Employment";
 import defaultLogo from "../images/logo.png";
 
 export default function Portfolio() {
-    const initialUser = useMemo(() => ({
-        name: "홍길동",
-        phone: "010-1111-1111",
-        address: "서울시 OO구 OO동",
-        desiredJobs: ["프론트엔드", "백엔드", "풀스택"],
-        techStack: ["React", "Spring", "MySQL"],
-        interests: ["카카오", "네이버", "삼성"],
-        projects: [
-            { name: "프로젝트 A", period: "1개월", type: "웹 개발", award: "없음", description: "간단한 웹사이트 제작", techStack: ["React", "CSS"] },
-            { name: "프로젝트 B", period: "2개월", type: "앱 개발", award: "없음", description: "모바일 앱 제작", techStack: ["React Native", "Node.js"] },
-            { name: "프로젝트 C", period: "3개월", type: "백엔드 개발", award: "없음", description: "API 서버 제작", techStack: ["Spring", "MySQL"] }
-        ],
-        appliedJobs: [
-            {
-                empSeqno: "123456",
-                empWantedTitle: "프론트엔드 개발자",
-                empBusiNm: "신세계푸드",
-                empWantedTypeNm: "정규직",
-                empWantedStdt: "2025-08-20",
-                empWantedEndt: "2025-09-10",
-                empWantedHomepgDetail: "https://job.example.com/123456",
-                regLogImgNm: defaultLogo,
-                location: "서울"
-            },
-            {
-                empSeqno: "654321",
-                empWantedTitle: "백엔드 개발자",
-                empBusiNm: "OO회사",
-                empWantedTypeNm: "계약직",
-                empWantedStdt: "2025-08-22",
-                empWantedEndt: "2025-09-15",
-                empWantedHomepgDetail: "https://job.example.com/654321",
-                regLogImgNm: defaultLogo,
-                location: "부산"
-            },
-            {
-                empSeqno: "654321",
-                empWantedTitle: "백엔드 개발자",
-                empBusiNm: "OO회사",
-                empWantedTypeNm: "계약직",
-                empWantedStdt: "2025-08-22",
-                empWantedEndt: "2025-09-15",
-                empWantedHomepgDetail: "https://job.example.com/654321",
-                regLogImgNm: defaultLogo,
-                location: "부산"
-            },
-            {
-                empSeqno: "654321",
-                empWantedTitle: "백엔드 개발자",
-                empBusiNm: "OO회사",
-                empWantedTypeNm: "계약직",
-                empWantedStdt: "2025-08-22",
-                empWantedEndt: "2025-09-15",
-                empWantedHomepgDetail: "https://job.example.com/654321",
-                regLogImgNm: defaultLogo,
-                location: "부산"
-            },
-            {
-                empSeqno: "654321",
-                empWantedTitle: "백엔드 개발자",
-                empBusiNm: "OO회사",
-                empWantedTypeNm: "계약직",
-                empWantedStdt: "2025-08-22",
-                empWantedEndt: "2025-09-15",
-                empWantedHomepgDetail: "https://job.example.com/654321",
-                regLogImgNm: defaultLogo,
-                location: "부산"
-            },
-            {
-                empSeqno: "654321",
-                empWantedTitle: "백엔드 개발자",
-                empBusiNm: "OO회사",
-                empWantedTypeNm: "계약직",
-                empWantedStdt: "2025-08-22",
-                empWantedEndt: "2025-09-15",
-                empWantedHomepgDetail: "https://job.example.com/654321",
-                regLogImgNm: defaultLogo,
-                location: "부산"
-            },
-            {
-                empSeqno: "654321",
-                empWantedTitle: "백엔드 개발자",
-                empBusiNm: "OO회사",
-                empWantedTypeNm: "계약직",
-                empWantedStdt: "2025-08-22",
-                empWantedEndt: "2025-09-15",
-                empWantedHomepgDetail: "https://job.example.com/654321",
-                regLogImgNm: defaultLogo,
-                location: "부산"
-            }
-        ]
-    }), []);
+    const fileInputRef = useRef(null);
+    const [imagePreview, setImagePreview] = useState(null);
 
-    const [user, setUser] = useState(initialUser);
+    const [user, setUser] = useState(null); // 초기값 null
+    const [editData, setEditData] = useState({});
     const [isEditing, setIsEditing] = useState(false);
-    const [editData, setEditData] = useState({ ...initialUser });
 
-    const [desiredJobs, setDesiredJobs] = useState(initialUser.desiredJobs);
-    const [techStack, setTechStack] = useState(initialUser.techStack);
+    const [desiredJobs, setDesiredJobs] = useState([]);
+    const [techStack, setTechStack] = useState([]);
 
-    // 선택 상태 (Set 사용: 빠른 토글/존재확인)
     const [selectedDesired, setSelectedDesired] = useState(new Set());
     const [selectedTech, setSelectedTech] = useState(new Set());
     const [selectedJob, setSelectedJob] = useState(null);
 
-    // 입력값 (새 태그 추가)
     const [desiredInput, setDesiredInput] = useState('');
     const [techInput, setTechInput] = useState('');
 
     const [selectedProject, setSelectedProject] = useState(null);
+
     const colors = [
-        "#A7C7E7", // 파스텔 블루
-        "#B5EAD7", // 파스텔 민트
-        "#C7CEEA", // 파스텔 퍼플
-        "#FFDAC1", // 파스텔 오렌지
-        "#FFB7B2", // 파스텔 핑크
-        "#E2F0CB", // 파스텔 그린
+        "#A7C7E7", "#B5EAD7", "#C7CEEA",
+        "#FFDAC1", "#FFB7B2", "#E2F0CB",
     ];
 
     const getColorForItem = (item) => {
@@ -132,13 +37,7 @@ export default function Portfolio() {
         }
         return colors[Math.abs(hash) % colors.length];
     };
-/*
-    const user = {
-        ...initialUser,
-        desiredJobs,
-        techStack,
-    };
-*/
+
     const toggleSelection = (section, value) => {
         const updater = section === 'desired' ? setSelectedDesired : setSelectedTech;
         const current = section === 'desired' ? selectedDesired : selectedTech;
@@ -178,13 +77,30 @@ export default function Portfolio() {
             });
         }
     };
+
     const handleChange = (field, value) => {
         setEditData(prev => ({ ...prev, [field]: value }));
     };
 
-    const handleSave = () => {
-        setUser(editData);
-        setIsEditing(false);
+    const handleSave = async () => {
+        try {
+            const response = await axios.put(
+                `http://localhost:8080/member/${user.id}`,
+                {
+                    name: editData.name,
+                    phone: editData.phone,
+                    email: editData.email,
+                },
+                { headers: { "Content-Type": "application/json" } }
+            );
+            setUser(response.data);
+            setEditData(response.data);
+            setIsEditing(false);
+            alert("정보가 수정되었습니다.");
+        } catch (error) {
+            console.error("정보 수정 실패:", error);
+            alert("정보 수정에 실패했습니다.");
+        }
     };
 
     const handleCancel = () => {
@@ -199,14 +115,59 @@ export default function Portfolio() {
         }
     };
 
+    const handleDivClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onloadend = () => setImagePreview(reader.result);
+        reader.readAsDataURL(file);
+    };
+
+    // ✅ DB에서 회원 정보 불러오기
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/member/1`); // id 1 예시
+                const data = response.data;
+                setUser(data);
+                setEditData(data);
+                setDesiredJobs(data.desiredJobs || []);
+                setTechStack(data.techStack || []);
+            } catch (error) {
+                console.error("회원 정보 불러오기 실패:", error);
+            }
+        };
+        fetchUser();
+    }, []);
+
+    if (!user) return <p>회원 정보를 불러오는 중...</p>; // 로딩 처리
 
     return (
         <div className={styles['profile-page']}>
             <div className={styles['profile-container']}>
                 <div className={styles['profile-left']}>
                     <div className={styles['profile-image-info']}>
-                        <div className={styles['profile-image']}></div>
-
+                        <div
+                            className={styles['profile-image']}
+                            onClick={handleDivClick}
+                            style={{
+                                backgroundImage: imagePreview ? `url(${imagePreview})` : 'none',
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                cursor: 'pointer',
+                            }}
+                        ></div>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            style={{ display: 'none' }}
+                        />
                         <div className={styles['basic-info']}>
                             <h3>
                                 기본 정보
@@ -233,10 +194,9 @@ export default function Portfolio() {
                                     />
                                     <input
                                         type="text"
-                                        value={editData.address}
-                                        onChange={(e) => handleChange("address", e.target.value)}
+                                        value={editData.email}
+                                        onChange={(e) => handleChange("email", e.target.value)}
                                     />
-
                                     <div className={styles['edit-actions']}>
                                         <button onClick={handleSave} className={styles['save-btn']}>
                                             ✔️ 완료
@@ -250,15 +210,17 @@ export default function Portfolio() {
                                 <>
                                     <p>{user.name}</p>
                                     <p>{user.phone}</p>
-                                    <p>{user.address}</p>
+                                    <p>{user.email}</p>
                                 </>
                             )}
                         </div>
                     </div>
+
+                    {/* 관심 기업 */}
                     <div className={styles['interests']}>
                         <h3>관심 기업</h3>
                         <div className={styles['circle-list']}>
-                            {initialUser.interests.map((item, idx) => (
+                            {(user.interests || []).map((item, idx) => (
                                 <div
                                     key={idx}
                                     className={styles.circle}
@@ -271,14 +233,15 @@ export default function Portfolio() {
                         </div>
                     </div>
 
+                    {/* 프로젝트 */}
                     <div className={styles.projects}>
                         <h3>나의 프로젝트</h3>
                         <div className={styles['circle-list']}>
-                            {initialUser.projects.map((proj, idx) => (
+                            {(user.projects || []).map((proj, idx) => (
                                 <div
                                     key={idx}
                                     className={styles.circle}
-                                    style={{ backgroundColor: getColorForItem(proj)}}
+                                    style={{ backgroundColor: getColorForItem(proj.name)}}
                                     onClick={() => setSelectedProject(proj)}
                                 >
                                     <span className={styles['circle-text']}>{proj.name[0]}</span>
@@ -288,7 +251,9 @@ export default function Portfolio() {
                     </div>
                 </div>
 
+                {/* 우측 영역 */}
                 <div className={styles['profile-right']}>
+                    {/* 희망 직무 */}
                     <div className={styles['desired-jobs']}>
                         <h3>희망 직무</h3>
                         <div className={styles['tag-row']}>
@@ -312,6 +277,7 @@ export default function Portfolio() {
                         </div>
                     </div>
 
+                    {/* 기술 스택 */}
                     <div className={styles['tech-stack']}>
                         <h3>기술 스택</h3>
                         <div className={styles['tag-row']}>
@@ -322,7 +288,6 @@ export default function Portfolio() {
                                 </div>
                             ))}
                         </div>
-
                         <div className={styles['tag-input-row']}>
                             <input
                                 type="text"
@@ -336,10 +301,11 @@ export default function Portfolio() {
                         </div>
                     </div>
 
+                    {/* 지원한 공고 */}
                     <div className={styles['applied-jobs']}>
                         <h3>지원한 공고</h3>
                         <div className={styles['job-cards']}>
-                            {user.appliedJobs.map((job) => (
+                            {(user.appliedJobs || []).map((job) => (
                                 <div key={job.empSeqno} className={styles['job-card']} onClick={() => setSelectedJob(job)}>
                                     <img
                                         src={job.regLogImgNm || defaultLogo}
@@ -358,17 +324,14 @@ export default function Portfolio() {
                         </div>
                     </div>
                 </div>
+
+                {/* 모달 */}
                 <div className={styles['profile-modal']}>
-                    {/* 오른쪽 상세 정보 탭 */}
                     {selectedProject && (
                         <ProjectModal
                             project={selectedProject}
                             onClose={() => setSelectedProject(null)}
-                            onUpdate={(updatedProject) => {
-                                console.log("업데이트된 프로젝트:", updatedProject);
-                                setSelectedProject(updatedProject);
-                                // TODO: 추후 DB 반영
-                            }}
+                            onUpdate={(updatedProject) => setSelectedProject(updatedProject)}
                         />
                     )}
                     {selectedJob && (
