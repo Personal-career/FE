@@ -2,6 +2,7 @@ import React, { useMemo, useState, useRef, useEffect } from 'react';
 import axios from "axios";
 import styles from '../styles/Portfolio.module.css';
 import ProjectModal from "../components/ProjectModal";
+import Spinner from "../components/Spinner";
 import EmploymentModal from "../components/Employment";
 import defaultLogo from "../images/logo.png";
 
@@ -293,7 +294,6 @@ export default function Portfolio() {
         reader.readAsDataURL(file);
     };
 
-    // ✅ DB에서 회원 정보 불러오기
     useEffect(() => {
         const fetchUser = async () => {
             try {
@@ -302,7 +302,7 @@ export default function Portfolio() {
                 setUser(data);
                 setEditData(data);
 
-                // ✅ 여기서 서버 데이터 초기 세팅
+                //서버 데이터 초기 세팅
                 setDesiredJobs(data.desiredRoles || []);
                 setTechStack(data.skills || []);
             } catch (error) {
@@ -313,10 +313,26 @@ export default function Portfolio() {
     }, []);
 
 
-    if (!user) return <p className={styles['info']}>회원 정보를 불러오는 중...</p>; // 로딩 처리
+    if (!user) {
+        return (
+            <Spinner label="회원 정보를 불러오는 중..." />
+        );
+    }
 
-    if (loading) return <div className={styles['info']}>로딩 중...</div>;
-    if (error) return <div className={styles['info']}>오류 발생: {error.message}</div>;
+    if (loading) {
+        return (
+            <Spinner label="로딩중..." />
+        );
+    }
+
+    if (error) {
+        return (
+            <div className={styles['info']}>
+                오류 발생: {error.message}
+            </div>
+        );
+    }
+
     return (
         <div className={styles['profile-page']}>
             <div className={styles['profile-container']}>
