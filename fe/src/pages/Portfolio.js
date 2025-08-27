@@ -4,6 +4,7 @@ import styles from '../styles/Portfolio.module.css';
 import ProjectModal from "../components/ProjectModal";
 import Spinner from "../components/Spinner";
 import EmploymentModal from "../components/Employment";
+import ProjectBoard from "../components/ProjectBoard";
 import defaultLogo from "../images/logo.png";
 
 export default function Portfolio() {
@@ -477,18 +478,29 @@ export default function Portfolio() {
                     {/* 프로젝트 */}
                     <div className={styles.projects}>
                         <h3>나의 프로젝트</h3>
-                        <div className={styles['circle-list']}>
+                        <ProjectBoard
+                            projects={projects}
+                            onSelect={(proj) => setSelectedProject(proj)} // 카드 클릭 시 모달 열기
+                        />
+                        {/*
+                        <div className={styles['board-list']}>
                             {projects.map((proj, idx) => (
                                 <div
                                     key={proj.id ? proj.id : idx}
-                                    className={styles.circle}
-                                    style={{ backgroundColor: getColorForItem(proj.name || `project-${idx}`) }}
+                                    className={styles['board-card']}
                                     onClick={() => setSelectedProject(proj)}
                                 >
-                                    <span className={styles['circle-text']}>{proj.name ? proj.name[0] : '?'}</span>
+                                    <div className={styles['board-card-header']} style={{ backgroundColor: getColorForItem(proj.name || `project-${idx}`) }}>
+                                        <h4>{proj.name || '프로젝트 이름 없음'}</h4>
+                                    </div>
+                                    <div className={styles['board-card-body']}>
+                                        <p><strong>기간:</strong> {proj.period || '정보 없음'}</p>
+                                        <p><strong>기술:</strong> {proj.tech_stack || '정보 없음'}</p>
+                                        <p>{proj.description || '설명 없음'}</p>
+                                    </div>
                                 </div>
                             ))}
-                        </div>
+                        </div> */}
                     </div>
 
 

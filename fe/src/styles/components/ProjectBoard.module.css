@@ -1,0 +1,96 @@
+.project-board {
+    width: 100%;
+    padding: 20px;
+    position: relative;
+    overflow: hidden; /* 오버플로우 숨김 */
+}
+
+/* 카드 스타일 */
+.project-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px 15px 0 15px; /* 기존 15px → 10px */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    width: 220px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* 공간을 균등 배분하지 않고 위쪽으로 정렬 */
+    cursor: pointer;
+    overflow: hidden; /* 내용이 넘치면 숨김 */
+}
+
+.project-card h4 {
+    margin: 0 0 4px;
+    font-size: 1rem; /* 기존 1.2rem → 1rem */
+    line-height: 1.2; /* 줄 간격 조정 */
+    overflow: hidden;
+    text-overflow: ellipsis; /* 길면 ... 표시 */
+    white-space: nowrap; /* 한 줄로 제한 */
+}
+
+.project-card p {
+    font-size: 0.8rem; /* 기존 0.9rem → 0.8rem */
+    color: #555;
+    margin-bottom: 2px; /* 간격 줄임 */
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+}
+
+/* SwiperSlide */
+:global(.swiper-slide) {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    box-sizing: border-box;
+    padding: 0 10px; /* 카드 간격 */
+}
+
+/* Swiper wrapper overflow */
+:global(.swiper) {
+    overflow: visible; /* 버튼이 보이도록 */
+}
+
+/* Swiper 버튼 */
+:global(.swiper-button-prev),
+:global(.swiper-button-next) {
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    z-index: 50;
+    background: rgba(255,255,255,0.95);
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* 버튼 아이콘 */
+:global(.swiper-button-prev::after),
+:global(.swiper-button-next::after) {
+    font-size: 20px;
+    color: #4f46e5;
+}
+
+/* 버튼 좌우 위치 */
+:global(.swiper-button-prev) {
+    left: 0; /* 카드 안쪽 끝 */
+}
+:global(.swiper-button-next) {
+    right: 0; /* 카드 안쪽 끝 */
+}
+
+/* Pagination */
+:global(.swiper-pagination) {
+    position: relative; /* 기존 absolute 제거 */
+    bottom: auto;       /* 기존 bottom 제거 */
+    margin-top: 10px;   /* 카드 밑에 여유 공간 */
+    text-align: center;
+}
