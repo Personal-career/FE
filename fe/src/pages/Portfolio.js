@@ -136,8 +136,6 @@ export default function Portfolio() {
         fetchProjects();
     }, []);
 
-
-
     const colors = [
         "#A7C7E7", "#B5EAD7", "#C7CEEA",
         "#FFDAC1", "#FFB7B2", "#E2F0CB",
@@ -300,19 +298,27 @@ export default function Portfolio() {
             try {
                 const response = await axios.get(`http://localhost:8080/member/1`);
                 const data = response.data;
+
+                // user 정보 세팅
                 setUser(data);
                 setEditData(data);
 
-                //서버 데이터 초기 세팅
                 setDesiredJobs(data.desiredRoles || []);
                 setTechStack(data.skills || []);
+
+                // 관심기업 불러오기
+                const favResponse = await axios.get("http://localhost:8080/api/jobs/favorite");
+                const favorites = favResponse.data;
+                setUser(prev => ({
+                    ...prev,
+                    interests: favorites  // user.interests로 연결
+                }));
             } catch (error) {
                 console.error("회원 정보 불러오기 실패:", error);
             }
         };
         fetchUser();
     }, []);
-
 
     if (!user) {
         return (
@@ -466,10 +472,14 @@ export default function Portfolio() {
                                 <div
                                     key={idx}
                                     className={styles.circle}
-                                    style={{ backgroundColor: getColorForItem(item)}}
-                                    onClick={() => setDesiredJobs(item)}
+                                    style={{ backgroundColor: getColorForItem(item.companyName) }}
+                                    onClick={() => item.applyLink && window.open(item.applyLink, "_blank")}
                                 >
-                                    <span className={styles['circle-text']}>{item[0]}</span>
+                                    <img
+                                        src={item.companyLogo || defaultLogo}
+                                        alt={item.companyName}
+                                        className={styles['circle-logo']}
+                                    />
                                 </div>
                             ))}
                         </div>
@@ -482,25 +492,6 @@ export default function Portfolio() {
                             projects={projects}
                             onSelect={(proj) => setSelectedProject(proj)} // 카드 클릭 시 모달 열기
                         />
-                        {/*
-                        <div className={styles['board-list']}>
-                            {projects.map((proj, idx) => (
-                                <div
-                                    key={proj.id ? proj.id : idx}
-                                    className={styles['board-card']}
-                                    onClick={() => setSelectedProject(proj)}
-                                >
-                                    <div className={styles['board-card-header']} style={{ backgroundColor: getColorForItem(proj.name || `project-${idx}`) }}>
-                                        <h4>{proj.name || '프로젝트 이름 없음'}</h4>
-                                    </div>
-                                    <div className={styles['board-card-body']}>
-                                        <p><strong>기간:</strong> {proj.period || '정보 없음'}</p>
-                                        <p><strong>기술:</strong> {proj.tech_stack || '정보 없음'}</p>
-                                        <p>{proj.description || '설명 없음'}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div> */}
                     </div>
 
 

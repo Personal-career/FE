@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";   // ✅ API 호출용
 import ChatBot from "../components/ChatBot";
 import EmploymentModal from "../components/Employment"; // 모달 import
 import '../styles/HomePage.css';
@@ -12,32 +13,42 @@ export default function HomePage() {
     const [chatOpen, setChatOpen] = useState(false);
     const [selectedJob, setSelectedJob] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [jobs, setJobs] = useState([]);
     const jobsPerPage = 4;
     const navigate = useNavigate();
 
-    //더미데이터
-    const jobs = [
-        { empSeqno: "123456", empWantedTitle: "프론트엔드 개발자", empBusiNm: "신세계푸드", empWantedTypeNm: "정규직", empWantedStdt: "2025-08-20", empWantedEndt: "2025-09-10", empWantedHomepgDetail: "https://job.example.com/123456", regLogImgNm: defaultLogo, location: "서울" },
-        { empSeqno: "654321", empWantedTitle: "백엔드 개발자", empBusiNm: "OO회사", empWantedTypeNm: "계약직", empWantedStdt: "2025-08-22", empWantedEndt: "2025-09-15", empWantedHomepgDetail: "https://job.example.com/654321", regLogImgNm: defaultLogo, location: "부산" },
-        { empSeqno: "222222", empWantedTitle: "풀스택 개발자", empBusiNm: "네이버", empWantedTypeNm: "정규직", empWantedStdt: "2025-08-22", empWantedEndt: "2025-09-30", empWantedHomepgDetail: "https://job.example.com/222222", regLogImgNm: defaultLogo, location: "판교" },
-        { empSeqno: "333333", empWantedTitle: "데이터 엔지니어", empBusiNm: "카카오", empWantedTypeNm: "정규직", empWantedStdt: "2025-08-25", empWantedEndt: "2025-09-18", empWantedHomepgDetail: "https://job.example.com/333333", regLogImgNm: defaultLogo, location: "제주" },
-        { empSeqno: "444444", empWantedTitle: "AI 연구원", empBusiNm: "삼성전자", empWantedTypeNm: "정규직", empWantedStdt: "2025-08-25", empWantedEndt: "2025-09-30", empWantedHomepgDetail: "https://job.example.com/444444", regLogImgNm: defaultLogo, location: "수원" },
-        { empSeqno: "555555", empWantedTitle: "모바일 개발자", empBusiNm: "LG CNS", empWantedTypeNm: "계약직", empWantedStdt: "2025-08-27", empWantedEndt: "2025-09-20", empWantedHomepgDetail: "https://job.example.com/555555", regLogImgNm: defaultLogo, location: "서울" }
-    ];
+    useEffect(() => {
+        axios.get("http://localhost:8080/api/jobs")
+            .then(res => {
+                setJobs(res.data);
+            })
+            .catch(err => {
+                console.error("🚨 채용공고 불러오기 실패:", err);
+            });
+    }, []);
+
     const indexOfLastJob = currentPage * jobsPerPage;
     const indexOfFirstJob = indexOfLastJob - jobsPerPage;
     const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
 
     const totalPages = Math.ceil(jobs.length / jobsPerPage);
 
-    // → 카드 클릭 시 모달 열기
+    // 카드 클릭 시 모달 열기
     const handleCardClick = (job) => {
         setSelectedJob(job);
     };
 
-    // → 모달 닫기
+    // 모달 닫기
     const handleCloseModal = () => {
         setSelectedJob(null);
+    };
+
+    const getDDay = (endDate) => {
+        if (!endDate) return "";
+        const today = new Date();
+        const end = new Date(endDate);
+        const diff = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+        return diff >= 0 ? `D-${diff}` : "마감";
     };
 
     return (
@@ -88,7 +99,7 @@ export default function HomePage() {
                                 height="100px"
                                 width="150px"
                             />
-                            <p id="d-day">D-10</p>
+                            <p id="d-day">{getDDay(job.empWantedEndt)}</p>
                             <p id="company-name">{job.empBusiNm}</p>
                             <h4 id="job">{job.empWantedTitle}</h4>
                             <p id="description">
@@ -96,25 +107,6 @@ export default function HomePage() {
                             </p>
                         </div>
                     ))}
-
-
-                    {/*
-                    {jobs.map((job) => (
-                        <div key={job.empSeqno} className="card" onClick={() => handleCardClick(job)}>
-                            <img
-                                src={job.regLogImgNm || defaultLogo}
-                                alt="company"
-                                height="100px"
-                                width="150px"
-                            />
-                            <p id="d-day">D-10</p>
-                            <p id="company-name">{job.empBusiNm}</p>
-                            <h4 id="job">{job.empWantedTitle}</h4>
-                            <p id="description">
-                                {job.location} · {job.empWantedTypeNm}
-                            </p>
-                        </div>
-                    ))}*/}
                 </div>
                 <div className="pagination">
                     <button

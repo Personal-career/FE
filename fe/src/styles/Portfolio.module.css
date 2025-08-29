@@ -457,3 +457,27 @@ p.job-card {
     padding-left: 10px;
     padding-right: 10px;
 }
+
+.circle-list {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.circle-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
