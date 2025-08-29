@@ -124,7 +124,11 @@ export default function Portfolio() {
                 const response = await axios.get("http://localhost:8080/portfolio");
                 const projects = response.data.map(p => ({
                     ...p,
-                    techStack: Array.isArray(p.techStack) ? p.techStack : []
+                    techStack: Array.isArray(p.techStack)
+                        ? p.techStack
+                        : p.techStack
+                            ? p.techStack.split(",").map(s => s.trim())
+                            : []
                 }));
                 setProjects(projects);
             } catch (err) {
@@ -292,6 +296,27 @@ export default function Portfolio() {
         reader.onloadend = () => setImagePreview(reader.result);
         reader.readAsDataURL(file);
     };
+
+    // 삭제 처리 함수
+    const handleDeleteProject = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:8080/portfolio/${id}`, {
+                method: "DELETE",
+            });
+
+            if (response.ok) {
+                // ✅ 삭제 성공 시, 프론트 목록에서 제거
+                setProjects((prev) => prev.filter((proj) => proj.id !== id));
+                alert("프로젝트가 삭제되었습니다.");
+            } else {
+                alert("삭제 실패");
+            }
+        } catch (error) {
+            console.error("삭제 오류:", error);
+            alert("서버 오류로 삭제 실패");
+        }
+    };
+
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -462,7 +487,46 @@ export default function Portfolio() {
 
                 {/* 우측 영역 */}
                 <div className={styles['profile-right']}>
-
+                    {/* 프로젝트 */}
+                                        <div className={styles.projects}>
+                                            <h3>나의 프로젝트
+                                            <button
+                                                        className={styles['add-btn']}
+                                                        onClick={() => setSelectedProject({
+                                                            id: null,
+                                                            name: "",
+                                                            period: "",
+                                                            type: "",
+                                                            description: "",
+                                                            techStack: []
+                                                        })}
+                                                    >
+                                                        + 프로젝트 추가
+                                                    </button></h3>
+                                            <ProjectBoard
+                                                projects={projects}
+                                                onSelect={(proj) => setSelectedProject(proj)} // 카드 클릭 시 모달 열기
+                                            />
+                                            {/*
+                                            <div className={styles['board-list']}>
+                                                {projects.map((proj, idx) => (
+                                                    <div
+                                                        key={proj.id ? proj.id : idx}
+                                                        className={styles['board-card']}
+                                                        onClick={() => setSelectedProject(proj)}
+                                                    >
+                                                        <div className={styles['board-card-header']} style={{ backgroundColor: getColorForItem(proj.name || `project-${idx}`) }}>
+                                                            <h4>{proj.name || '프로젝트 이름 없음'}</h4>
+                                                        </div>
+                                                        <div className={styles['board-card-body']}>
+                                                            <p><strong>기간:</strong> {proj.period || '정보 없음'}</p>
+                                                            <p><strong>기술:</strong> {proj.tech_stack || '정보 없음'}</p>
+                                                            <p>{proj.description || '설명 없음'}</p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div> */}
+                                        </div>
 
                     {/* 관심 기업 */}
                     <div className={styles['interests']}>
@@ -484,16 +548,6 @@ export default function Portfolio() {
                             ))}
                         </div>
                     </div>
-
-                    {/* 프로젝트 */}
-                    <div className={styles.projects}>
-                        <h3>나의 프로젝트</h3>
-                        <ProjectBoard
-                            projects={projects}
-                            onSelect={(proj) => setSelectedProject(proj)} // 카드 클릭 시 모달 열기
-                        />
-                    </div>
-
 
                     {/* 지원한 공고 */}
                     <div className={styles['applied-jobs']}>
@@ -524,8 +578,29 @@ export default function Portfolio() {
                     {selectedProject && (
                         <ProjectModal
                             project={selectedProject}
-                            onClose={() => setSelectedProject(null)}
-                            onUpdate={(updatedProject) => setSelectedProject(updatedProject)}
+                                onClose={() => setSelectedProject(null)}
+                                onUpdate={async (proj) => {
+                                    try {
+                                        if (!proj.id) {
+                                            // 신규 추가
+                                            const response = await axios.post("http://localhost:8080/portfolio", proj, {
+                                                headers: { "Content-Type": "application/json" }
+                                            });
+                                            setProjects([...projects, response.data]);
+                                        } else {
+                                            // 기존 수정
+                                            const response = await axios.put(`http://localhost:8080/portfolio/${proj.id}`, proj, {
+                                                headers: { "Content-Type": "application/json" }
+                                            });
+                                            setProjects(projects.map(p => (p.id === proj.id ? response.data : p)));
+                                        }
+                                        setSelectedProject(null);
+                                    } catch (error) {
+                                        console.error("프로젝트 저장 실패:", error);
+                                        alert("프로젝트 저장에 실패했습니다.");
+                                    }
+                                }}
+                            onDelete={handleDeleteProject}
                         />
                     )}
                     {selectedJob && (

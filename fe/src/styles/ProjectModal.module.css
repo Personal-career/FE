@@ -93,3 +93,9 @@ button {
 button:hover {
     background-color: grey;
 }
+.delete-btn {
+    background-color: red;
+}
+.delete-btn:hover {
+    background-color: darkred;
+}
